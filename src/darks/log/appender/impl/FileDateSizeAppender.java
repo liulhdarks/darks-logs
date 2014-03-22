@@ -30,7 +30,7 @@ import darks.log.layout.LoggerLayout;
 /**
  * Appender for file. The appender can keep log files in custom days(Default 7
  * days). If current log file's size is out of custom max size(Default 10MB), it
- * will create the new one. FileDateSizeAppender.java<br>
+ * will create the new one. <br>
  * Example:
  * 
  * <pre>
@@ -42,6 +42,8 @@ import darks.log.layout.LoggerLayout;
  *  logd.appender.FILE.maxSize=10485760
  *  logd.appender.FILE.keepDay=7
  * </pre>
+ * 
+ * FileDateSizeAppender.java
  * 
  * @see FileAppender
  * @see StreamAppender

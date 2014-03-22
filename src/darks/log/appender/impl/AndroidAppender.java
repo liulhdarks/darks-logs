@@ -24,7 +24,7 @@ import darks.log.appender.Appender;
 import darks.log.kernel.Kernel;
 
 /**
- * Appender for android. The appender wiil output log message in logcat. <br>
+ * Appender for android. The appender will output log message in logcat. <br>
  * Example:
  * 
  * <pre>

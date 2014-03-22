@@ -20,7 +20,18 @@ package darks.log.filter;
 import darks.log.LogMessage;
 
 /**
- * Filter will decide whether allow output log message.
+ * Filter will decide whether allow output log message.<br/>
+ * Example:
+ * <pre>
+ * public class CustomFilter extends LoggerFilter
+ * {
+ *     public int decide(LogMessage msg)
+ *     {
+ *        ...
+ *        return ALLOW;
+ *     }
+ * }
+ * </pre>
  * 
  * LoggerFilter.java
  * 

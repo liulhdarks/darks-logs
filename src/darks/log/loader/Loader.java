@@ -38,7 +38,6 @@ public abstract class Loader
     /**
      * Load config
      * 
-     * @param ins Config input stream
      * @return If succeed to load config, return true.
      */
     public abstract boolean loadConfig();

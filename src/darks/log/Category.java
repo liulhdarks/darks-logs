@@ -27,7 +27,7 @@ import darks.log.kernel.Kernel;
 
 /**
  * Record logger's category information.Include appenders, level, name and so on.
- * Category object wiil inherit root category attributes.
+ * Category object will inherit root category attributes.
  * 
  * Category.java
  * @version 1.0.0

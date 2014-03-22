@@ -259,7 +259,7 @@ public abstract class Logger
      * Add appender object
      * 
      * @param appender Appender object
-     * @param rooted If true, appender wiil be added to root logger. otherwise
+     * @param rooted If true, appender will be added to root logger. otherwise
      *            be added to current logger.
      */
     public abstract void addAppender(Appender appender, boolean rooted);
