@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Created-By: Liu Lihua
+Built-By: Windows 7
+Build-Jdk: 1.6.0
+
+Name: darks.log
+Implementation-Title: logd
+Implementation-Vendor: "Darks Logs Project"
+Implementation-Version: 1.0.1
+

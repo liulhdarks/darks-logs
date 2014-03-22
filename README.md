@@ -1,17 +1,24 @@
 Darks Logs 
 ==========
 
+A log library like log4j for java, android, web project.
 Darks logs is a log library like log4j for Java, Android and Web project. It can be configured and used like log4j,. At the same time it can be easy to used on android application. Darks logs can output log message to console, logcat, file, socket, sqlite and so on. Developers can even customize its output style.
 Let's have a look how to use it.
 
+Configuration
 Configuration File
 -----------
+darks-logs
+
+
+
+
 Before we use darks-logs, we must create the configuration file named logd.properties. 
 
 ### Java configuration
 If your project need to work on console, Web or desktop with Java, you should create the logd.properties in the root of src directory. 
 
-### Android condfiguration
+### Android configuration
 If your project need to work on android application, you should create it in assets directory. After ensure logd.properties file exists, we must set the android.app.Application object to Logger before used.<br/>
 Example:<br/>
 <pre>
@@ -36,11 +43,11 @@ Example:
   static Logger log = Logger.getLogger("darks.logs.test.TestLogger");
   static Logger log = Logger.getLogger("TestLogger");
 </pre>
-After define Logger variable, you can call info, debug, warn, error and so on to output message for specift level.
+After define Logger variable, you can call info, debug, warn, error and so on to output message for specify level.
 Example:
 <pre>
   log.debug("This is the darks logs hello world.");
-  log.info("Info message will be ouput");
+  log.info("Info message will be output");
   log.error("Happen a exception. Cause " + e.getMessage(), e);
 </pre>
 
@@ -193,7 +200,7 @@ Example:
 </pre>
 
 <h4>Custom Appender</h4>
-Developer can create custom appender by inherit Appender. If override needPattern reeturn true, it will fotmat log message before append.<br/>
+Developer can create custom appender by inherit Appender. If override needPattern return true, it will format log message before append.<br/>
 Example:
 <pre>
   public class CustomAppender extends Appender
@@ -253,4 +260,29 @@ Example:
 logd.inherit = false
 </pre>
 
+Comprehensive Example
+-----------
+<pre>
+  logd.root=debug,console,FILE
+  logd.additivity = false  
+
+  logd.appender.console=ConsoleAppender
+  logd.appender.console.layout=PatternLayout
+  logd.appender.console.layout.convertor=DefaultPattern
+  logd.appender.console.layout.pattern=%d{yyyy-MM-dd HH:mm:ss} [%p] %c - %m%n
+  logd.appender.console.async=false
+  logd.appender.console.filter=LevelRangeFilter
+  logd.appender.console.filter.levelMin=debug
+  logd.appender.console.filter.levelMax=info
+  logd.appender.console.filter.accept=false
+
+  logd.appender.FILE=FileDateSizeAppender
+  logd.appender.FILE.layout=PatternLayout
+  logd.appender.FILE.layout.pattern=%d{yyyy-MM-dd HH:mm:ss} %c{1} - %m%n
+  logd.appender.FILE.fileName=${user.dir}\logs\log_${Dyyyy_MM_dd_HH_mm_ss}.txt
+  logd.appender.FILE.buffered=true
+  logd.appender.FILE.maxSize=2000000
+
+  logd.logger.darks.log.test=info
+</pre>
 I wish you a pleasant to use darks-logs. If you have some good advice or bug report, please share with us. Thank you!
