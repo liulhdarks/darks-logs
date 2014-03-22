@@ -28,7 +28,7 @@ import darks.log.layout.LoggerLayout;
 import darks.log.utils.IoUtils;
 
 /**
- * Appender for stream. The appender wiil output log message to stream. You
+ * Appender for stream. The appender will output log message to stream. You
  * cannot use StreamAppender directly in logd.properties.<br>
  * Example:
  * 

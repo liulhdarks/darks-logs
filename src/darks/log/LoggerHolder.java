@@ -23,7 +23,7 @@ import java.util.List;
 import darks.log.appender.Appender;
 
 /**
- * Appenders's holder for async appender. It wiil be handled in logger thread.
+ * Appenders's holder for async appender. It will be handled in logger thread.
  * LoggerHolder.java
  * 
  * @see LoggerThread

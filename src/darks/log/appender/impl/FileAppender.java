@@ -144,7 +144,7 @@ public class FileAppender extends StreamAppender
      * 
      * @param path File path
      * @param append If true, append content to stream.
-     * @param bufIO If true, immediateFlush wiil be false.
+     * @param bufIO If true, immediateFlush will be false.
      * @param bufSize Buffer size
      * @return File path after converted
      * @throws IOException IOException object

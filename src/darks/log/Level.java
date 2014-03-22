@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Indicate the log message's level.
  * 
- * The low level wiil ouput upper level message. For example:
+ * The low level will output upper level message. For example:
  * 
  * <pre>
  * TRACE &gt; ERROR &gt; WARN &gt; INFO &gt; DEBUG &gt; VERBOSE
@@ -148,7 +148,7 @@ public class Level implements Serializable
 	 * 
 	 * @param lv1 Level source
 	 * @param lv2 Level target
-	 * @return If lv1 is greater than lv2, it wiil return > 0. If lv1 is less
+	 * @return If lv1 is greater than lv2, it will return > 0. If lv1 is less
 	 *         than lv2, return < 0. otherwise return 0.
 	 */
 	public static int compare(Level lv1, Level lv2)
@@ -160,7 +160,7 @@ public class Level implements Serializable
 	 * Compare level between this and target level.
 	 * 
 	 * @param target Level target
-	 * @return If this level is greater than target, it wiil return > 0. If this
+	 * @return If this level is greater than target, it will return > 0. If this
 	 *         level is less than target, return < 0. otherwise return 0.
 	 */
 	public int compare(Level target)

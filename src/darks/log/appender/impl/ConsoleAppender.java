@@ -22,7 +22,7 @@ import darks.log.LogMessage;
 import darks.log.appender.Appender;
 
 /**
- * Appender for system console. The appender wiil output log message in command
+ * Appender for system console. The appender will output log message in command
  * console. <br>
  * Example:
  * 

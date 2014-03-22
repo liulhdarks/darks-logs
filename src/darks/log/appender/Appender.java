@@ -31,7 +31,7 @@ import darks.log.utils.StringUtils;
  * Appender interface for Custom log output. Example:
  * 
  * <pre>
- * public class SqliteAppender extends Appender
+ * public class CustomAppender extends Appender
  * {
  * 
  *     &#064;Override
@@ -72,7 +72,7 @@ public abstract class Appender
     private LoggerFilter filter;
 
     /**
-     * If true, indicate that log message wiil be outputed in logger thread.
+     * If true, indicate that log message will be output in logger thread.
      */
     private boolean async = false;
 
@@ -98,7 +98,7 @@ public abstract class Appender
     }
 
     /**
-     * The method wiil be called before first of doAppend called.
+     * The method will be called before first of doAppend called.
      */
     public void activateHandler()
     {
@@ -136,7 +136,7 @@ public abstract class Appender
      * Append log message
      * 
      * @param msg Log message
-     * @param log if needPattern() return true, log wiil be formatted by layout.
+     * @param log if needPattern() return true, log will be formatted by layout.
      *            Otherwise return LogMessage.message
      * @throws Exception Exception information
      */
