@@ -55,7 +55,7 @@ Example:<br/>
 </pre>
 
 ### Config Appenders
-Darks logs has realized some frequently used appenders. Such as ConsoleAppender, AndroidAppender, FileAppender and so on. If you have configure multiple appenders, it wiil output log message to each appender when every message comes. All of appenders inherit from Appender<br/>
+Darks logs has realized some frequently used appenders. Such as ConsoleAppender, AndroidAppender, FileAppender and so on. If you have configure multiple appenders, it will output log message to each appender when every message comes. All of appenders inherit from Appender<br/>
 Example:
 <pre>
   logd.root=info,console
@@ -88,7 +88,7 @@ Appender is the base class of all appenders. Appender can configure layout, filt
   
   <h5>filter</h5>
   Logger filter can filter log message such as LevelRangeFilter by level.<br/>
-  LevelRangeFilter: Output message which's level between minimum level and maximun level.<br/>
+  LevelRangeFilter: Output message which's level between minimum level and maximum level.<br/>
   Example:
 <pre>
   logd.appender.console=ConsoleAppender
