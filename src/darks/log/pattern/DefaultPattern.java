@@ -108,7 +108,7 @@ public class DefaultPattern implements ConvertPattern
      * {@inheritDoc}
      */
     @Override
-    public void setPattern(String pattern)
+    public boolean setPattern(String pattern)
     {
         this.pattern = pattern;
         parser = new PatternParser(pattern);
@@ -116,8 +116,14 @@ public class DefaultPattern implements ConvertPattern
         {
             resetDefault();
             Kernel.logWarn("Log pattern is invalid.pattern:" + pattern);
+            return false;
         }
         convertor = parser.parseConvertor();
+        if (convertor == null)
+        {
+            return false;
+        }
+        return true;
     }
 
     private void resetDefault()

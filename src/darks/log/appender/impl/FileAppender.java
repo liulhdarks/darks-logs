@@ -119,13 +119,14 @@ public class FileAppender extends StreamAppender
      * {@inheritDoc}
      */
     @Override
-    public void activateHandler()
+    public boolean activateHandler()
     {
         if (fileName != null)
         {
             try
             {
                 createFile(fileName, fileAppend, buffered, bufferSize);
+                return true;
             }
             catch (IOException e)
             {
@@ -137,6 +138,7 @@ public class FileAppender extends StreamAppender
         {
             Kernel.logWarn("File appender's file name is null");
         }
+        return false;
     }
 
     /**

@@ -91,6 +91,10 @@ public class LoggerConfig
 	 */
 	public boolean getInherit(String name)
 	{
+	    if (name == null)
+	    {
+	        return false;
+	    }
 		Boolean match = null;
 		String maxKey = null;
 		for (Entry<String, Boolean> entry : inherits.entrySet())

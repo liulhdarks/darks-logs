@@ -93,15 +93,15 @@ public class SocketAppender extends StreamAppender
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void activateHandler()
+	public boolean activateHandler()
 	{
-		connect();
+		return connect();
 	}
 	
 	/**
 	 * Connect to server
 	 */
-	public void connect()
+	public boolean connect()
 	{
 		if (socket == null || !socket.isConnected())
 		{
@@ -121,6 +121,7 @@ public class SocketAppender extends StreamAppender
 				Kernel.logError("Fail to active socket appender. Cause " + e.getMessage(), e);
 			}
 		}
+		return inited;
 	}
 	
 	private void initIO() throws IOException

@@ -88,21 +88,29 @@ public abstract class Appender
         this.layout = layout;
     }
 
-    private void checkActivate()
+    private boolean checkActivate()
     {
         if (!activated)
         {
-            activated = true;
-            activateHandler();
+            try
+            {
+                activated = activateHandler();
+            }
+            catch (Exception e)
+            {
+                Kernel.logError("Fail to active appender " + this.getClass()
+                        + ". Cause " + e.getMessage());
+            }
         }
+        return activated;
     }
 
     /**
      * The method will be called before first of doAppend called.
      */
-    public void activateHandler()
+    public boolean activateHandler()
     {
-
+        return true;
     }
 
     /**

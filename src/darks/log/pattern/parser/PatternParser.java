@@ -17,6 +17,9 @@
 
 package darks.log.pattern.parser;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import darks.log.exceptions.PatternException;
 import darks.log.utils.StringUtils;
 
@@ -34,6 +37,8 @@ public class PatternParser
     private PatternConvertor head;
 
     private PatternConvertor tail;
+
+    private static Map<String, PatternConvertor> convertorsMap = new ConcurrentHashMap<String, PatternConvertor>();
 
     public PatternParser()
     {
@@ -73,6 +78,11 @@ public class PatternParser
      */
     public PatternConvertor parseConvertor()
     {
+        head = convertorsMap.get(pattern);
+        if (head != null)
+        {
+            return head;
+        }
         StringBuilder buf = new StringBuilder(32);
         int index = 0;
         while (index < pattern.length())
@@ -94,6 +104,7 @@ public class PatternParser
             addConvertor(new StringPatternConvertor(buf.toString()));
             buf.setLength(0);
         }
+        convertorsMap.put(pattern, head);
         return head;
     }
 

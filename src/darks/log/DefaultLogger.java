@@ -96,7 +96,14 @@ public class DefaultLogger extends Logger
 					appender.doAppend(logMsg);
 				}
 			}
-			cate = cate.getParent();
+			if (cate.isInherit())
+			{
+	            cate = cate.getParent();
+			}
+			else
+			{
+			    break;
+			}
 		}
 		if (!holder.isEmpty())
 		{

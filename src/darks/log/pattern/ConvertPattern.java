@@ -35,7 +35,7 @@ public interface ConvertPattern
      * 
      * @param pattern Pattern string
      */
-    public void setPattern(String pattern);
+    public boolean setPattern(String pattern);
 
     /**
      * Format message by pattern

@@ -87,15 +87,6 @@ public class FileDateSizeAppender extends FileAppender
      * {@inheritDoc}
      */
     @Override
-    public void activateHandler()
-    {
-        super.activateHandler();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected void expandAppend(LogMessage msg, String log) throws Exception
     {
         RecordOutputStream ros = (RecordOutputStream) getOutStream();

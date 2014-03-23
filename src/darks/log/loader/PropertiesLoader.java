@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 import darks.log.Category;
 import darks.log.Level;
@@ -282,6 +283,7 @@ public class PropertiesLoader extends Loader
         AppenderManager.registerAppender(appender);
     }
 
+    @SuppressWarnings("unchecked")
     private void readAppenderParams(String[] args, String val)
     {
         String name = args[2].trim();
@@ -312,6 +314,11 @@ public class PropertiesLoader extends Loader
                 throw new ConfigException("Appender's params setting field '"
                         + args[i] + "' is null.");
             }
+            if (baseObj instanceof Map<?, ?>)
+            {
+                putMapValue((Map<String, String>) baseObj, i + 1, args, val);
+                return;
+            }
         }
         name = args[size - 1];
         if (!ReflectUtils.setStringValue(baseObj, name, val))
@@ -321,6 +328,27 @@ public class PropertiesLoader extends Loader
         }
     }
 
+    private boolean putMapValue(Map<String, String> map, int index, String[] args, String val)
+    {
+        StringBuilder buf = new StringBuilder();
+        int argLen = args.length;
+        for (int i = index; i < argLen; i++)
+        {
+            buf.append(args[i]);
+            if (i != argLen - 1)
+            {
+                buf.append('.');
+            }
+        }
+        String key = buf.toString().trim();
+        if ("".equals(key))
+        {
+            return false;
+        }
+        map.put(key, val);
+        return true;
+    }
+    
     private String getString(String[] args, int start)
     {
         return getString(args, start, args.length - 1);

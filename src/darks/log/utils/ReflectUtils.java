@@ -107,60 +107,132 @@ public final class ReflectUtils
     
     public static boolean setMethodValue(Object obj, Method method, Class<?> paramType, String val)
     {
-    	try
-		{
-        	if (int.class.equals(paramType) || Integer.class.equals(paramType))
-        	{
-        		method.invoke(obj, Integer.parseInt(val));
-        	}
-        	else if (short.class.equals(paramType) || Short.class.equals(paramType))
-        	{
-        		method.invoke(obj, Short.parseShort(val));
-        	}
-        	else if (boolean.class.equals(paramType) || Boolean.class.equals(paramType))
-        	{
-        		method.invoke(obj, Boolean.parseBoolean(val));
-        	}
-        	else if (byte.class.equals(paramType) || Byte.class.equals(paramType))
-        	{
-        		method.invoke(obj, Byte.parseByte(val));
-        	}
-        	else if (long.class.equals(paramType) || Long.class.equals(paramType))
-        	{
-        		method.invoke(obj, Long.parseLong(val));
-        	}
-        	else if (double.class.equals(paramType) || Double.class.equals(paramType))
-        	{
-        		method.invoke(obj, Double.parseDouble(val));
-        	}
-        	else if (float.class.equals(paramType) || Float.class.equals(paramType))
-        	{
-        		method.invoke(obj, Float.parseFloat(val));
-        	}
-        	else if (char.class.equals(paramType))
-        	{
-        		method.invoke(obj, val.charAt(0));
-        	}
-        	else if (String.class.equals(paramType))
-        	{
-        		method.invoke(obj, val);
-        	}
-        	else
-        	{
-        		Class<?> clazz = ClassFinder.findClass(val, DEFAULT_DIRS);
-        		if (clazz == null)
-        		{
-        			throw new ConfigException("Cannot instance object class " + val);
-        		}
-        		method.invoke(obj, ReflectUtils.newInstance(clazz));
-        	}
-        	return true;
-		}
-		catch (Exception e)
-		{
-			Kernel.logWarn("Fail to set method value. Cause " + e.getMessage());
-		}
-    	return false;
+        Object vobject = convertStringObject(paramType, val);
+        if (vobject == null)
+        {
+            return false;
+        }
+        try
+        {
+            method.invoke(obj, vobject);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Kernel.logWarn("Fail to set method value. Cause " + e.getMessage());
+        }
+        return false;
+//    	try
+//		{
+//        	if (int.class.equals(paramType) || Integer.class.equals(paramType))
+//        	{
+//        		method.invoke(obj, Integer.parseInt(val));
+//        	}
+//        	else if (short.class.equals(paramType) || Short.class.equals(paramType))
+//        	{
+//        		method.invoke(obj, Short.parseShort(val));
+//        	}
+//        	else if (boolean.class.equals(paramType) || Boolean.class.equals(paramType))
+//        	{
+//        		method.invoke(obj, Boolean.parseBoolean(val));
+//        	}
+//        	else if (byte.class.equals(paramType) || Byte.class.equals(paramType))
+//        	{
+//        		method.invoke(obj, Byte.parseByte(val));
+//        	}
+//        	else if (long.class.equals(paramType) || Long.class.equals(paramType))
+//        	{
+//        		method.invoke(obj, Long.parseLong(val));
+//        	}
+//        	else if (double.class.equals(paramType) || Double.class.equals(paramType))
+//        	{
+//        		method.invoke(obj, Double.parseDouble(val));
+//        	}
+//        	else if (float.class.equals(paramType) || Float.class.equals(paramType))
+//        	{
+//        		method.invoke(obj, Float.parseFloat(val));
+//        	}
+//        	else if (char.class.equals(paramType))
+//        	{
+//        		method.invoke(obj, val.charAt(0));
+//        	}
+//        	else if (String.class.equals(paramType))
+//        	{
+//        		method.invoke(obj, val);
+//        	}
+//        	else
+//        	{
+//        		Class<?> clazz = ClassFinder.findClass(val, DEFAULT_DIRS);
+//        		if (clazz == null)
+//        		{
+//        			throw new ConfigException("Cannot instance object class " + val);
+//        		}
+//        		method.invoke(obj, ReflectUtils.newInstance(clazz));
+//        	}
+//        	return true;
+//		}
+//		catch (Exception e)
+//		{
+//			Kernel.logWarn("Fail to set method value. Cause " + e.getMessage());
+//		}
+//    	return false;
+    }
+    
+    public static Object convertStringObject(Class<?> paramType, String val)
+    {
+        try
+        {
+            if (int.class.equals(paramType) || Integer.class.equals(paramType))
+            {
+                return Integer.parseInt(val);
+            }
+            else if (short.class.equals(paramType) || Short.class.equals(paramType))
+            {
+                return Short.parseShort(val);
+            }
+            else if (boolean.class.equals(paramType) || Boolean.class.equals(paramType))
+            {
+                return Boolean.parseBoolean(val);
+            }
+            else if (byte.class.equals(paramType) || Byte.class.equals(paramType))
+            {
+                return Byte.parseByte(val);
+            }
+            else if (long.class.equals(paramType) || Long.class.equals(paramType))
+            {
+                return Long.parseLong(val);
+            }
+            else if (double.class.equals(paramType) || Double.class.equals(paramType))
+            {
+                return Double.parseDouble(val);
+            }
+            else if (float.class.equals(paramType) || Float.class.equals(paramType))
+            {
+                return Float.parseFloat(val);
+            }
+            else if (char.class.equals(paramType))
+            {
+                return val.charAt(0);
+            }
+            else if (String.class.equals(paramType))
+            {
+                return val;
+            }
+            else
+            {
+                Class<?> clazz = ClassFinder.findClass(val, DEFAULT_DIRS);
+                if (clazz == null)
+                {
+                    throw new ConfigException("Cannot instance object class " + val);
+                }
+                return ReflectUtils.newInstance(clazz);
+            }
+        }
+        catch (Exception e)
+        {
+            Kernel.logWarn("Fail to set method value. Cause " + e.getMessage());
+        }
+        return null;
     }
     
     public static Method getSetMethod(Class<?> clazz, String name)
@@ -215,9 +287,13 @@ public final class ReflectUtils
 		{
         	return clazz.getMethod(buf.toString());
 		}
+    	catch (NoSuchMethodException e)
+    	{
+    	    Kernel.logError("Fail to get " + clazz.getName() + "'s get method:" + e.getMessage());
+    	}
 		catch (Exception e)
 		{
-			Kernel.logError(e.getMessage(), e);
+		    Kernel.logError("Fail to get method.Cause " + e.getMessage());
 		}
     	return null;
     }

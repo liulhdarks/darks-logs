@@ -165,7 +165,8 @@ Example:
   logd.appender.SOCKET.serverPort=8686
   logd.appender.SOCKET.keepAlive=true
   logd.appender.SOCKET.tcpNoDelay=true
-  logd.appender.SOCKET.wrapBytes=true #Wrap log message with head bytes.
+  #Wrap log message with head bytes.
+  logd.appender.SOCKET.wrapBytes=true
 </pre>
 
 <h4>FileAppender</h4>
@@ -190,6 +191,43 @@ Example:
   logd.appender.FILE.buffered=true
   logd.appender.FILE.maxSize=10485760
   logd.appender.FILE.keepDay=7
+</pre>
+
+<h4>StorgeAppender</h4>
+StorgeAppender will output log message to stream. You cannot use StorgeAppender directly in logd.properties. You should create a sub class which extends StorgeAppender.<br/>
+Example:
+<pre>
+  public class CustomDBAppender extends StorgeAppender
+  {
+      @Override
+      public boolean activateHandler()
+      {
+          return super.activateHandler();
+      }
+    
+      @Override
+      public void append(LogMessage msg, String log) throws Exception
+      {
+          ...
+      }
+  }
+</pre>
+
+<h4>SqliteAppender</h4>
+SqliteAppender can use android sqlite database to save log records. It will build the insert SQL statement automatically through columnsMap and table fields.<br/>
+Example:
+<pre>
+  logd.appender.SQLITE=SqliteAppender
+  logd.appender.SQLITE.layout=PatternLayout
+  logd.appender.SQLITE.dbName=db_records
+  logd.appender.SQLITE.dbVersion=1
+  logd.appender.SQLITE.table=t_logs
+  logd.appender.SQLITE.createSQL=create table if not exists t_logs(_id integer primary key autoincrement,date text,level text,source integer,file text,message text)
+  logd.appender.SQLITE.columnsMap.date=%d{yyyy-MM-dd HH:mm:ss}
+  logd.appender.SQLITE.columnsMap.level=%p
+  logd.appender.SQLITE.columnsMap.source=%L
+  logd.appender.SQLITE.columnsMap.file=%f
+  logd.appender.SQLITE.columnsMap.message=%m
 </pre>
 
 <h4>Custom Appender</h4>
@@ -251,6 +289,7 @@ Example:
 <pre>
 #logd.additivity = false
 logd.inherit = false
+logd.inherit.darks.logs.test = true
 </pre>
 
 Comprehensive Example
