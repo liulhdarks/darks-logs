@@ -42,7 +42,7 @@ public final class EnvUtils
             Class.forName("android.text.format.DateFormat");
             Class.forName("android.content.Context");
             Class.forName("android.app.Application");
-            return false;
+            return true;
         }
         catch (ClassNotFoundException e)
         {

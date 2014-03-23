@@ -56,9 +56,11 @@ Example:<br/>
 
 ### Config Appenders
 Darks logs has realized some frequently used appenders. Such as ConsoleAppender, AndroidAppender, FileAppender and so on. If you have configure multiple appenders, it will output log message to each appender when every message comes. All of appenders inherit from Appender<br/>
+If you need to configure class full name such as "darks.log.appender.impl.ConsoleAppender", you could just configure ConsoleAppender. If you configure class full name, it will load class directly. Or if you configure class simple name, it will find class in package darks.log.appender.impl, darks.log.filter, darks.log.layout, darks.log.pattern, darks.log.externs and so on.
 Example:
 <pre>
   logd.root=info,console
+  #logd.appender.console=darks.log.appender.impl.ConsoleAppender
   logd.appender.console=ConsoleAppender
   logd.appender.console.layout=PatternLayout
   logd.appender.console.layout.pattern=%d{yyyy-MM-dd HH:mm:ss} %c{1} - %m%n
