@@ -313,7 +313,6 @@ Comprehensive Example
 -----------
 <pre>
   logd.root=debug,console,FILE
-  logd.additivity = false  
 
   logd.appender.console=ConsoleAppender
   logd.appender.console.layout=PatternLayout
@@ -330,8 +329,9 @@ Comprehensive Example
   logd.appender.FILE.layout.pattern=%d{yyyy-MM-dd HH:mm:ss} %c{1} - %m%n
   logd.appender.FILE.fileName=${user.dir}\logs\log_${Dyyyy_MM_dd_HH_mm_ss}.txt
   logd.appender.FILE.buffered=true
-  logd.appender.FILE.maxSize=2000000
-
+  logd.appender.FILE.maxSize=10485760
+  logd.appender.FILE.keepDay=7
+  
   logd.logger.darks.log.test=info
 </pre>
 I wish you a pleasant to use darks-logs. If you have some good advice or bug report, please share with us. Thank you!
