@@ -144,8 +144,16 @@ public class StreamAppender extends Appender
             data = IoUtils.getObjectBytes(msg);
             break;
         default:
-            data = getThrowMessage(log, msg.getThrowableInfo().getThrowable())
-                    .getBytes();
+            String logFully = getThrowMessage(log, msg.getThrowableInfo().getThrowable());
+            if (encoding == null || "".equals(encoding.trim()))
+            {
+                data = logFully.getBytes();
+            }
+            else
+            {
+                data = logFully.getBytes(encoding);
+            }
+            
             break;
         }
         if (wrapBytes)

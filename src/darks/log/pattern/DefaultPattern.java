@@ -30,6 +30,7 @@ import darks.log.pattern.parser.PatternParser;
  * <pre>
  *  %n, %N: Output a return character.
  *  %m, %M: Output the log message content.
+ *  %e, %E: Output exception stack information.
  *  %d, %D: Output date by format pattern. Such as "%d{yyyy-MM-dd HH:mm:ss}".
  *  %c:     Output the namespace or tags. 
  *          You can use {layer number} to output the namespace's layer specified. 
@@ -90,18 +91,26 @@ public class DefaultPattern implements ConvertPattern
         {
             return null;
         }
-        StringBuilder buf = new StringBuilder(1024);
-        PatternConvertor cur = convertor;
-        while (cur != null)
+        try
         {
-            if (!cur.format(buf, message))
+            StringBuilder buf = new StringBuilder(1024);
+            PatternConvertor cur = convertor;
+            while (cur != null)
             {
-                Kernel.logError("Log message pattern conversion error.");
-                return null;
+                if (!cur.format(buf, message))
+                {
+                    Kernel.logError("Log message pattern conversion error.");
+                    return "";
+                }
+                cur = cur.getNext();
             }
-            cur = cur.getNext();
+            return buf.toString();
         }
-        return buf.toString();
+        catch (Exception e)
+        {
+            Kernel.logError("Log message pattern conversion error. Cause " + e.getMessage());
+        }
+        return "";
     }
 
     /**

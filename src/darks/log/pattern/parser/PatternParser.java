@@ -153,6 +153,10 @@ public class PatternParser
         case 'm': // log message
             convert = new MessagePatternConvertor();
             break;
+        case 'E':
+        case 'e': // exception stack information
+            convert = new ExceptionStackPatternConvertor();
+            break;
         case 'D':
         case 'd': // date
             convert = new DatePatternConvertor();
@@ -221,7 +225,7 @@ public class PatternParser
                 {
                     buf.append(ch);
                 }
-                else if (ch != ' ')
+                else
                 {
                     index--;
                     finish = true;

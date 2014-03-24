@@ -17,72 +17,54 @@
 
 package darks.log.utils;
 
-import java.io.File;
-
 import android.os.Environment;
 import android.text.TextUtils;
 
 /**
  * StorageUtils.java
+ * 
  * @version 1.0.0
  * @author Liu lihua
  */
 public class StorageUtils
 {
-    
-    private static String CD_S_SdcardPath = "";
-    
-    private static String CD_S_SdcardPathAbsolute = "";
-    
+
+    public static final String STORAGE_EMULATED = "storage/emulated/";
+
+    public static final String STORAGE_SDCARD = "storage/sdcard";
+
+    private static String sdcardPath = "";
+
+    private static String sdcardPathAbsolute = "";
+
     public static String getSdcardPath()
     {
-        if (TextUtils.isEmpty(CD_S_SdcardPath))
-            CD_S_SdcardPath =
-                Environment.getExternalStorageDirectory().getPath();
-        
-        if (CD_S_SdcardPath.contains(CommonType.CT_S_Sdcard_Sign_Storage_emulated))
-            CD_S_SdcardPath =
-                CD_S_SdcardPath.replace(CommonType.CT_S_Sdcard_Sign_Storage_emulated,
-                    CommonType.CT_S_Sdcard_Sign_Storage_sdcard);
-        
-        return CD_S_SdcardPath;
+        if (TextUtils.isEmpty(sdcardPath))
+        {
+            sdcardPath = Environment.getExternalStorageDirectory().getPath();
+        }
+
+        if (sdcardPath.contains(STORAGE_EMULATED))
+        {
+            sdcardPath = sdcardPath.replace(STORAGE_EMULATED, STORAGE_SDCARD);
+        }
+        return sdcardPath;
     }
-    
+
     public static String getAbsoluteSdcardPath()
     {
-        if (TextUtils.isEmpty(CD_S_SdcardPathAbsolute))
-            CD_S_SdcardPathAbsolute =
-                Environment.getExternalStorageDirectory().getAbsolutePath();
-        
-        if (CD_S_SdcardPathAbsolute.contains(CommonType.CT_S_Sdcard_Sign_Storage_emulated))
-            CD_S_SdcardPathAbsolute =
-                CD_S_SdcardPathAbsolute.replace(CommonType.CT_S_Sdcard_Sign_Storage_emulated,
-                    CommonType.CT_S_Sdcard_Sign_Storage_sdcard);
-        
-        return CD_S_SdcardPathAbsolute;
-    }
-    
-    public static File getSdcardPathFile()
-    {
-        return new File(getSdcardPath());
-    }
-    
-    public static String checkAndReplaceEmulatedPath(String strSrc)
-    {
-        if (strSrc.contains(CommonType.CT_S_Sdcard_Sign_Storage_emulated))
-            strSrc =
-                strSrc.replace(CommonType.CT_S_Sdcard_Sign_Storage_emulated,
-                    CommonType.CT_S_Sdcard_Sign_Storage_sdcard);
-        return strSrc;
-    }
-    
-    class CommonType
-    {
-        public static final String CT_S_Sdcard_Sign_Storage_emulated =
-            "storage/emulated/";
-        
-        public static final String CT_S_Sdcard_Sign_Storage_sdcard =
-            "storage/sdcard";
-        
+        if (TextUtils.isEmpty(sdcardPathAbsolute))
+        {
+            sdcardPathAbsolute = Environment.getExternalStorageDirectory()
+                    .getAbsolutePath();
+        }
+
+        if (sdcardPathAbsolute.contains(STORAGE_EMULATED))
+        {
+            sdcardPathAbsolute = sdcardPathAbsolute.replace(STORAGE_EMULATED,
+                    STORAGE_SDCARD);
+        }
+
+        return sdcardPathAbsolute;
     }
 }

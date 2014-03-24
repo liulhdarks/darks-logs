@@ -51,6 +51,8 @@ public class PropertiesLoader extends Loader
 
     private static final String PARAM_ROOT = "root";
 
+    private static final String PARAM_ROOT_LOGGER = "rootLogger";
+
     private static final String PARAM_CATEGORY = "category";
 
     private static final String PARAM_INHERIT = "inherit";
@@ -63,7 +65,13 @@ public class PropertiesLoader extends Loader
 
     private static final String APPENDER_CLASS_DIR = "darks.log.appender.impl";
 
+    private static final String HEAD_LINE = PREFFIX + PARAM_ROOT;
+
+    private static final String HEAD_LINE_LOGGER = PREFFIX + PARAM_ROOT_LOGGER;
+
     private BufferedReader reader;
+
+    private boolean firstRead = true;
 
     public PropertiesLoader(InputStream ins)
     {
@@ -96,6 +104,7 @@ public class PropertiesLoader extends Loader
 
     private void readConfig() throws IOException
     {
+        firstRead = true;
         String line = null;
         while ((line = reader.readLine()) != null)
         {
@@ -132,6 +141,15 @@ public class PropertiesLoader extends Loader
             throw new ConfigException("logger config has a invalid line:"
                     + line);
         }
+        if (firstRead)
+        {
+            if (!HEAD_LINE.equals(key) && !HEAD_LINE_LOGGER.equals(key))
+            {
+                throw new ConfigException(
+                        "logger config cannot find root. logd.root must be configured first of all.");
+            }
+            firstRead = false;
+        }
         String[] args = key.split("\\.");
         if (args.length < 2)
         {
@@ -156,7 +174,8 @@ public class PropertiesLoader extends Loader
     private void readMainParam(String param, String[] args, String val)
     {
         LoggerConfig confg = Logger.getConfig();
-        if (PARAM_ROOT.equalsIgnoreCase(param))
+        if (PARAM_ROOT.equalsIgnoreCase(param)
+                || PARAM_ROOT_LOGGER.equalsIgnoreCase(param))
         {
             confg.setRoot(readCategory(true, args, val));
         }
@@ -328,7 +347,8 @@ public class PropertiesLoader extends Loader
         }
     }
 
-    private boolean putMapValue(Map<String, String> map, int index, String[] args, String val)
+    private boolean putMapValue(Map<String, String> map, int index,
+            String[] args, String val)
     {
         StringBuilder buf = new StringBuilder();
         int argLen = args.length;
@@ -348,7 +368,7 @@ public class PropertiesLoader extends Loader
         map.put(key, val);
         return true;
     }
-    
+
     private String getString(String[] args, int start)
     {
         return getString(args, start, args.length - 1);

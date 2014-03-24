@@ -46,7 +46,7 @@ public class TestLogger
     {
         try
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 1; i++)
             {
                 log.info("darks logs test info " + i);
                 log.debug("darks logs test debug " + i);

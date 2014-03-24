@@ -172,13 +172,14 @@ Example:
 </pre>
 
 <h4>FileAppender</h4>
-FileAppender will output message to file. It extends StreamAppender. If you want to create dynamical file name, you can use ${PROPERTY_VARIABLE} to get system property value such as ${user.dir}. If you want to include the date or time in file name, you can use ${D[DATE_PATTERN]} such as ${Dyyyy_MM_dd_HH_mm_ss}.<br/>
+FileAppender will output message to file. It extends StreamAppender. If you want to create dynamical file name, you can use ${PROPERTY_VARIABLE} to get system property value such as ${user.dir}. If you want to get android SDCARD root directory, you can just use ${sdcard} to get the absolute path of android SDCARD. If you want to include the date or time in file name, you can use ${D[DATE_PATTERN]} such as ${Dyyyy_MM_dd_HH_mm_ss}.<br/>
 Example:
 <pre>
   logd.appender.FILE=FileAppender
   logd.appender.FILE.layout=PatternLayout
   logd.appender.FILE.layout.pattern=%d{yyyy-MM-dd HH:mm:ss} %c{1} - %m%n
-  logd.appender.FILE.fileName=${user.dir}/log_${Dyyyy_MM_dd_HH_mm_ss_SS}.txt
+  logd.appender.FILE.fileName=${user.dir}\log_${Dyyyy_MM_dd_HH_mm_ss_SS}.txt
+  #logd.appender.FILE.fileName=${sdcard}/log_${Dyyyy_MM_dd_HH_mm_ss_SS}.txt
   logd.appender.FILE.buffered=true
 </pre>
 
@@ -189,7 +190,7 @@ Example:
   logd.appender.FILE=FileDateSizeAppender
   logd.appender.FILE.layout=PatternLayout
   logd.appender.FILE.layout.pattern=%d{yyyy-MM-dd HH:mm:ss} %c{1} - %m%n
-  logd.appender.FILE.fileName=${user.dir}/log_${Dyyyy_MM_dd_HH_mm_ss_SS}.txt
+  logd.appender.FILE.fileName=${user.dir}\log_${Dyyyy_MM_dd_HH_mm_ss_SS}.txt
   logd.appender.FILE.buffered=true
   logd.appender.FILE.maxSize=10485760
   logd.appender.FILE.keepDay=7
@@ -258,6 +259,7 @@ Layout will use DefaultPattern to format message by default.<br/>
 <pre>
   %n, %N: Output a return character.
   %m, %M: Output the log message content.
+  %e, %E: Output exception stack information.
   %d, %D: Output date by format pattern. Such as "%d{yyyy-MM-dd HH:mm:ss}".
   %c:     Output the namespace or tags. 
           You can use {layer number} to output the namespace's layer specified. 

@@ -164,9 +164,9 @@ public class FileAppender extends StreamAppender
         if (fos != null)
         {
             OutputStream out = fos;
-            if (buffered)
+            if (bufIO)
             {
-                out = new BufferedOutputStream(fos, bufferSize);
+                out = new BufferedOutputStream(fos, bufSize);
             }
             setOutStream(expandOutStream(path, out));
         }

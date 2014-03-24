@@ -17,46 +17,58 @@
 
 package darks.log.pattern.parser;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import darks.log.LogMessage;
+import darks.log.utils.IoUtils;
 
 /**
- * Format a string directly
+ * Format exception stack information
  * 
- * StringPatternConvertor.java
+ * ExceptionStackPatternConvertor.java
+ * 
  * @version 1.0.0
  * @author Liu lihua
  */
-public class StringPatternConvertor extends PatternConvertor
+public class ExceptionStackPatternConvertor extends PatternConvertor
 {
-    private String data;
-    
-    public StringPatternConvertor(String data)
+
+    public ExceptionStackPatternConvertor()
     {
-        this.data = data;
+
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean format(StringBuilder buf, LogMessage message)
     {
-        if (data == null)
+        if (message == null)
         {
-        	return false;
+            return false;
         }
-        buf.append(data);
+        if (message.getThrowableInfo() == null 
+                || message.getThrowableInfo().getThrowable() == null)
+        {
+            return true;
+        }
+        Throwable t = message.getThrowableInfo().getThrowable();
+        StringWriter sw = new StringWriter(128);
+        PrintWriter pw = null;
+        try
+        {
+            pw = new PrintWriter(sw);
+            t.printStackTrace(pw);
+            pw.flush();
+        }
+        finally
+        {
+            IoUtils.closeIO(pw);
+        }
+        buf.append(sw.toString());
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public String toString()
-	{
-		return "StringPatternConvertor [data=" + data + "]";
-	}
-    
 }
