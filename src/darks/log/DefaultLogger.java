@@ -81,7 +81,7 @@ public class DefaultLogger extends Logger
 	 */
 	private void doLogger(LogMessage logMsg)
 	{
-		LoggerHolder holder = new LoggerHolder(logMsg);
+		LoggerHolder holder = null;
 		Category cate = category;
 		while (cate != null)
 		{
@@ -89,6 +89,10 @@ public class DefaultLogger extends Logger
 			{
 				if (appender.isAsync())
 				{
+				    if (holder == null)
+				    {
+				        holder = new LoggerHolder(logMsg);
+				    }
 					holder.addAppender(appender);
 				}
 				else
@@ -105,7 +109,7 @@ public class DefaultLogger extends Logger
 			    break;
 			}
 		}
-		if (!holder.isEmpty())
+		if (holder != null && !holder.isEmpty())
 		{
 			if (thread == null || !thread.isAlive())
 			{

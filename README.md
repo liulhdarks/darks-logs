@@ -90,6 +90,7 @@ Appender is the base class of all appenders. Appender can configure layout, filt
   
   <h5>filter</h5>
   Logger filter can filter log message such as LevelRangeFilter by level.<br/>
+  
   LevelRangeFilter: Output message which's level between minimum level and maximum level.<br/>
   Example:
 <pre>
@@ -101,6 +102,18 @@ Appender is the base class of all appenders. Appender can configure layout, filt
   logd.appender.console.filter.levelMax=info
   logd.appender.console.filter.accept=false
 </pre>
+
+  RegexMatchFilter: Regex match filter will output logs which messages match regex pattern.<br/>
+  Example:
+<pre>
+  logd.appender.console=ConsoleAppender
+  logd.appender.console.layout=PatternLayout
+  logd.appender.console.layout.pattern=%d{yyyy-MM-dd HH:mm:ss} %c{1} - %m%n
+  logd.appender.console.filter=RegexMatchFilter
+  logd.appender.console.filter.pattern=darks\d+
+  logd.appender.console.filter.accept=true
+</pre>
+
   Custom filter:
 <pre>
   public class CustomFilter extends LoggerFilter

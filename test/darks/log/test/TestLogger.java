@@ -52,6 +52,7 @@ public class TestLogger
                 log.debug("darks logs test debug " + i);
                 log.warn("darks logs test warn " + i);
                 log.error("darks logs test error " + i);
+                log.info("darks" + i);
             }
             testException();
         }
