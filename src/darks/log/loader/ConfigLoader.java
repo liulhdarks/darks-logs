@@ -56,19 +56,23 @@ public class ConfigLoader
      */
     public boolean initConfig()
     {
-        if (EnvUtils.isAndroidEnv())
+        loader = Logger.Config.getCustomLoader();
+        if (loader == null)
         {
-            if (Logger.Android == null 
-                    || Logger.Android.getApplication() == null)
+            if (EnvUtils.isAndroidEnv())
             {
-                throw new ConfigException(
-                        "Fail to load configuration. Android application has not been setted.");
+                if (Logger.Android == null 
+                        || Logger.Android.getApplication() == null)
+                {
+                    throw new ConfigException(
+                            "Fail to load configuration. Android application has not been setted.");
+                }
+                loader = Logger.Android.getLoader();
             }
-            loader = Logger.Android.getLoader();
-        }
-        else
-        {
-            loader = getDefaultLoader();
+            else
+            {
+                loader = getDefaultLoader();
+            }
         }
         if (loader == null || !loader.loadConfig())
         {
@@ -99,9 +103,9 @@ public class ConfigLoader
 
     private synchronized void initCategories()
     {
-        Category rootCate = Logger.getConfig().getRoot();
+        Category rootCate = Logger.Config.getRoot();
         rootCate.buildAppenderArray();
-        for (Category cate : Logger.getConfig().getCategories().values())
+        for (Category cate : Logger.Config.getCategories().values())
         {
             cate.buildAppenderArray();
         }

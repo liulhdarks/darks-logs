@@ -55,20 +55,34 @@ import darks.log.utils.EnvUtils;
  * 	Logger.Android.setApplication(...);
  * </pre>
  * 
+ * If you want to buffer, append or format log message, you can use
+ * LoggerBuffer. Example:
+ * 
+ * <pre>
+ * static Logger log = Logger.getLogger(&quot;demo&quot;);
+ * log.append(&quot;darks&quot;).append('-').append(&quot;logs&quot;).info();
+ * log.append(2014).append(1).append(1).debug(e);
+ * log.buffer(2014, &quot; is&quot;, &quot; a good year&quot;).debug();
+ * log.format(&quot;darks-logs was created in %d by %s&quot;, 2014, &quot;Liu Lihua&quot;).error(e);
+ * </pre>
+ * 
  * Logger.java
  * 
- * @version 1.0.0
+ * @version 1.0.1
  * @author Liu lihua 2014-3-21
  */
 public abstract class Logger
 {
 
     /**
-     * Android configration
+     * Android configuration
      */
     public static AndroidConfig Android;
 
-    private static LoggerConfig config;
+    /**
+     * Logger configuration
+     */
+    public static LoggerConfig Config = new LoggerConfig();
 
     static
     {
@@ -76,7 +90,6 @@ public abstract class Logger
         {
             Android = new AndroidConfig();
         }
-        config = new LoggerConfig();
     }
 
     /**
@@ -114,7 +127,7 @@ public abstract class Logger
      * 
      * @param msg log message
      */
-    public void info(String msg)
+    public void info(Object msg)
     {
         log(Level.INFO, msg);
     }
@@ -125,7 +138,7 @@ public abstract class Logger
      * @param msg Log message
      * @param t Throwable object
      */
-    public void info(String msg, Throwable t)
+    public void info(Object msg, Throwable t)
     {
         log(Level.INFO, msg, t);
     }
@@ -135,7 +148,7 @@ public abstract class Logger
      * 
      * @param msg Log message
      */
-    public void debug(String msg)
+    public void debug(Object msg)
     {
         log(Level.DEBUG, msg);
     }
@@ -146,7 +159,7 @@ public abstract class Logger
      * @param msg Log message
      * @param t Throwable object
      */
-    public void debug(String msg, Throwable t)
+    public void debug(Object msg, Throwable t)
     {
         log(Level.DEBUG, msg, t);
     }
@@ -156,7 +169,7 @@ public abstract class Logger
      * 
      * @param msg Log message
      */
-    public void warn(String msg)
+    public void warn(Object msg)
     {
         log(Level.WARN, msg);
     }
@@ -167,7 +180,7 @@ public abstract class Logger
      * @param msg Log message
      * @param t Throwable object
      */
-    public void warn(String msg, Throwable t)
+    public void warn(Object msg, Throwable t)
     {
         log(Level.WARN, msg, t);
     }
@@ -177,7 +190,7 @@ public abstract class Logger
      * 
      * @param msg Log message
      */
-    public void error(String msg)
+    public void error(Object msg)
     {
         log(Level.ERROR, msg);
     }
@@ -188,7 +201,7 @@ public abstract class Logger
      * @param msg Log message
      * @param t Throwable object
      */
-    public void error(String msg, Throwable t)
+    public void error(Object msg, Throwable t)
     {
         log(Level.ERROR, msg, t);
     }
@@ -198,7 +211,7 @@ public abstract class Logger
      * 
      * @param msg Log message
      */
-    public void trace(String msg)
+    public void trace(Object msg)
     {
         log(Level.TRACE, msg);
     }
@@ -209,7 +222,7 @@ public abstract class Logger
      * @param msg Log message
      * @param t Throwable object
      */
-    public void trace(String msg, Throwable t)
+    public void trace(Object msg, Throwable t)
     {
         log(Level.TRACE, msg, t);
     }
@@ -219,7 +232,7 @@ public abstract class Logger
      * 
      * @param msg Log message
      */
-    public void verbose(String msg)
+    public void verbose(Object msg)
     {
         log(Level.VERBOSE, msg);
     }
@@ -230,9 +243,60 @@ public abstract class Logger
      * @param msg Log message
      * @param t Throwable object
      */
-    public void verbose(String msg, Throwable t)
+    public void verbose(Object msg, Throwable t)
     {
         log(Level.VERBOSE, msg, t);
+    }
+
+    /**
+     * Append log message by string buffer.
+     * 
+     * @return Logger string buffer
+     */
+    public LoggerBuffer append()
+    {
+        return new LoggerBuffer(this);
+    }
+
+    /**
+     * Append log message by string buffer.
+     * 
+     * @param msg Log message
+     * @return Logger string buffer
+     */
+    public LoggerBuffer append(Object msg)
+    {
+        return new LoggerBuffer(this, msg);
+    }
+
+    /**
+     * Buffer log message string.
+     * 
+     * @param msgs Message arrays
+     * @return Logger buffer
+     */
+    public LoggerBuffer buffer(Object... msgs)
+    {
+        LoggerBuffer buf = new LoggerBuffer(this);
+        for (Object msg : msgs)
+        {
+            buf.append(msg);
+        }
+        return buf;
+    }
+
+    /**
+     * Format log message by pattern. It call String.format method to format log
+     * message.
+     * 
+     * @param format Format string.
+     * @param objs
+     * @return Logger string buffer
+     * @see java.util.Formatter
+     */
+    public LoggerBuffer format(String format, Object... objs)
+    {
+        return new LoggerBuffer(this).format(format, objs);
     }
 
     /**
@@ -241,7 +305,7 @@ public abstract class Logger
      * @param level Level object
      * @param msg Log message
      */
-    public void log(Level level, String msg)
+    public void log(Level level, Object msg)
     {
         log(level, msg, null);
     }
@@ -253,7 +317,7 @@ public abstract class Logger
      * @param msg Log message
      * @param t Throwable object
      */
-    public abstract void log(Level level, String msg, Throwable t);
+    public abstract void log(Level level, Object msg, Throwable t);
 
     /**
      * Add appender object
@@ -264,9 +328,45 @@ public abstract class Logger
      */
     public abstract void addAppender(Appender appender, boolean rooted);
 
-    public static LoggerConfig getConfig()
+    /**
+     * Check if debug mode enabled.
+     * 
+     * @return If debug mode enabled, return true.
+     */
+    public boolean isDebugEnabled()
     {
-        return config;
+        return false;
+    }
+
+    /**
+     * Check if info mode enabled.
+     * 
+     * @return If info mode enabled, return true.
+     */
+    public boolean isInfoEnabled()
+    {
+        return false;
+    }
+
+    /**
+     * Check if level's mode enabled.
+     * 
+     * @param level Target level
+     * @return If level's mode enabled, return true.
+     */
+    public boolean isLevelEnabled(Level level)
+    {
+        return false;
+    }
+
+    /**
+     * If parameter inheritRoot is true, children logger won't inherit root
+     * logger.
+     * 
+     * @param inheritRoot Whether inherit root logger.
+     */
+    public void setInherit(boolean inheritRoot)
+    {
     }
 
 }

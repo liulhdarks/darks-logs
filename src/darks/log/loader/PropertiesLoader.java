@@ -173,7 +173,7 @@ public class PropertiesLoader extends Loader
 
     private void readMainParam(String param, String[] args, String val)
     {
-        LoggerConfig confg = Logger.getConfig();
+        LoggerConfig confg = Logger.Config;
         if (PARAM_ROOT.equalsIgnoreCase(param)
                 || PARAM_ROOT_LOGGER.equalsIgnoreCase(param))
         {
@@ -205,7 +205,7 @@ public class PropertiesLoader extends Loader
                 throw new ConfigException("Logger category lost the name.");
             }
             cate.setName(getString(args, 2));
-            Category rootCate = Logger.getConfig().getRoot();
+            Category rootCate = Logger.Config.getRoot();
             if (rootCate == null)
             {
                 throw new ConfigException("Logger root doesn't be configurd.");
@@ -250,7 +250,7 @@ public class PropertiesLoader extends Loader
      */
     private void readInherit(String[] args, String val)
     {
-        LoggerConfig cfg = Logger.getConfig();
+        LoggerConfig cfg = Logger.Config;
         boolean bool = Boolean.parseBoolean(val);
         if (args.length == 2) // for global setting inherit
         {

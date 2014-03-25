@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import darks.log.exceptions.ConfigException;
+import darks.log.loader.Loader;
 
 /**
  * Logger configuration
@@ -42,6 +43,8 @@ public class LoggerConfig
 
 	private boolean rootInherit = true;
 
+	private Loader customLoader;
+	
 	public LoggerConfig()
 	{
 		root = new Category();
@@ -130,5 +133,15 @@ public class LoggerConfig
 	{
 		return categories;
 	}
+
+    public Loader getCustomLoader()
+    {
+        return customLoader;
+    }
+
+    public void setCustomLoader(Loader customLoader)
+    {
+        this.customLoader = customLoader;
+    }
 
 }

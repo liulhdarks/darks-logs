@@ -135,7 +135,6 @@ public class FileDateSizeAppender extends FileAppender
         {
             if (file.isFile() && curTime - file.lastModified() > keepTime)
             {
-                System.out.println("clear " + file);
                 file.delete();
             }
         }

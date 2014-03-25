@@ -19,6 +19,7 @@ package darks.log.pattern.parser;
 
 import darks.log.LogMessage;
 import darks.log.exceptions.PatternException;
+import darks.log.utils.StringUtils;
 
 /**
  * Format class name or nsmaspace/tags
@@ -63,21 +64,7 @@ public class TagPatternConvertor extends PatternConvertor
             try
             {
                 int num = Integer.parseInt(token);
-                String[] args = msg.split("\\.");
-                if (args.length >= num && num > 0)
-                {
-                    StringBuilder tagBuf = new StringBuilder(32);
-                    int len = args.length;
-                    for (int i = len - num; i < len; i++)
-                    {
-                        tagBuf.append(args[i]);
-                        if (i != len - 1)
-                        {
-                            tagBuf.append('.');
-                        }
-                    }
-                    msg = tagBuf.toString();
-                }
+                msg = StringUtils.getTagLayer(msg, num);
             }
             catch (Exception e)
             {

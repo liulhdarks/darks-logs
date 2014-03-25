@@ -77,10 +77,6 @@ public class Category
     		return appenderList;
     	}
     	appenderList.clear();
-//    	if (inherit && parent != null)
-//    	{
-//    		appenderList.addAll(parent.buildAppenderArray());
-//    	}
     	if (appenders != null)
     	{
         	for (String app : appenders)

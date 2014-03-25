@@ -38,7 +38,7 @@ public class InvalidLogger extends Logger
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void log(Level level, String msg, Throwable t)
+	public void log(Level level, Object msg, Throwable t)
 	{
 	}
 

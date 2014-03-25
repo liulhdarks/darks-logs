@@ -80,7 +80,7 @@ public final class LoggerFactory
 		{
 			return new InvalidLogger();
 		}
-		LoggerConfig cfg = Logger.getConfig();
+		LoggerConfig cfg = Logger.Config;
 		Category category = getCategory(cfg, tag);
 		category.setInherit(cfg.getInherit(category.getName()));
 		category.buildAppenderArray();
@@ -89,7 +89,7 @@ public final class LoggerFactory
 
 	private static Logger getRootLogger()
 	{
-		return new DefaultLogger(Logger.getConfig().getRoot(), "");
+		return new DefaultLogger(Logger.Config.getRoot(), "");
 	}
 
 	/**

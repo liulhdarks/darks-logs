@@ -1,17 +1,20 @@
 Darks Logs 
 ==========
 
-Darks logs is a log library like log4j for Java, Android and Web project. It can be configured and used like log4j,. At the same time it can be easy to used on android application. Darks logs can output log message to console, logcat, file, socket, sqlite and so on. Developers can even customize its output style.
+Darks logs is a log library for Java, Android and Web project. It can be configured and used like log4j. At the same time it can be easy to used on android application. Darks logs can output log message to console, logcat, file, socket, sqlite and so on. Developers can even customize its output style.
+Relative to the log4j, its ease of use is higher, lighter weight, better extensibility and portability.
+It is designed to solve the Android logs cannot be flexible control grade, format style and where can be saved or output. 
+It provides unified to Android transplantation for PC, the WEB log processing.<br/>
 Let's have a look how to use it.
 
 Configuration File
 -----------
 Before we use darks-logs, we must create the configuration file named logd.properties. 
 
-### Java configuration
+### Java Configuration
 If your project need to work on console, Web or desktop with Java, you should create the logd.properties in the root of src directory. 
 
-### Android configuration
+### Android Configuration
 If your project need to work on android application, you should create it in assets directory. After ensure logd.properties file exists, we must set the android.app.Application object to Logger before used.<br/>
 Example:<br/>
 <pre>
@@ -26,6 +29,11 @@ Example:<br/>
   }
 </pre>
 After logd.properties created, we can configure it for logger.
+
+### Customize Config Loader
+Darks Logs use properties loader default, which can load logd.properties from Java/src or Android/assets.
+If you want to load configuration file by yourself to customize file path, file format and so on, you can create a class 
+which extends darks.log.loader.Loader, then call Logger.Config.setCustomLoader(...) to set the custom loader.
 
 Start Logger
 -----------
@@ -42,6 +50,18 @@ Example:
   log.debug("This is the darks logs hello world.");
   log.info("Info message will be output");
   log.error("Happen a exception. Cause " + e.getMessage(), e);
+</pre>
+
+If you want to buffer, append or format log message string, you can use LoggerBuffer.<br/>
+Example:
+<pre>
+  static Logger log = Logger.getLogger(TestLogger.class);
+  
+  log.append("darks").append('-').append("logs").info();
+  log.append(2014).append(1).append(1).debug(e);
+  log.buffer(2014, " coming ", "now").warn();
+  log.format("darks-logs was created in %d by %s", 2014, "Liu Lihua").error(e);
+  log.append("...").append("...").format("...", ...).info();
 </pre>
 
 Modify Configuration
@@ -100,7 +120,7 @@ Appender is the base class of all appenders. Appender can configure layout, filt
   logd.appender.console.filter=LevelRangeFilter
   logd.appender.console.filter.levelMin=debug
   logd.appender.console.filter.levelMax=info
-  logd.appender.console.filter.accept=false
+  logd.appender.console.filter.accept=true
 </pre>
 
   RegexMatchFilter: Regex match filter will output logs which messages match regex pattern.<br/>
@@ -141,12 +161,14 @@ Example:
 </pre>
 
 <h4>AndroidAppender</h4>
-AndroidAppender is used to output message to android logcat.<br/>
+AndroidAppender is used to output message to android logcat. <br/>
 Example:
 <pre>
   logd.appender.ANDROID=AndroidAppender
+  #Output the layer of namespace to the logcat's TAG. Default layer 1.
+  logd.appender.ANDROID.layer=1
   logd.appender.ANDROID.layout=PatternLayout
-  logd.appender.ANDROID.layout.pattern=%m%n
+  logd.appender.ANDROID.layout.pattern=%m
 </pre>
 
 <h4>StreamAppender</h4>

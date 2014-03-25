@@ -22,6 +22,7 @@ import darks.log.Level;
 import darks.log.LogMessage;
 import darks.log.appender.Appender;
 import darks.log.kernel.Kernel;
+import darks.log.utils.StringUtils;
 
 /**
  * Appender for android. The appender will output log message in logcat. <br>
@@ -43,6 +44,8 @@ import darks.log.kernel.Kernel;
 public class AndroidAppender extends Appender
 {
 
+    private int layer = 1;
+    
     public AndroidAppender()
     {
     }
@@ -61,29 +64,30 @@ public class AndroidAppender extends Appender
         Level level = msg.getLevel();
         Throwable e = msg.getThrowableInfo().getThrowable();
         log = getThrowMessage(log, e);
+        String tag = StringUtils.getTagLayer(msg.getNamespace(), layer);
         if (level.equals(Level.DEBUG))
         {
-            Log.d(msg.getNamespace(), log);
+            Log.d(tag, log);
         }
         else if (level.equals(Level.ERROR))
         {
-            Log.e(msg.getNamespace(), log);
+            Log.e(tag, log);
         }
         else if (level.equals(Level.INFO))
         {
-            Log.i(msg.getNamespace(), log);
+            Log.i(tag, log);
         }
         else if (level.equals(Level.VERBOSE))
         {
-            Log.v(msg.getNamespace(), log);
+            Log.v(tag, log);
         }
         else if (level.equals(Level.WARN))
         {
-            Log.w(msg.getNamespace(), log);
+            Log.w(tag, log);
         }
         else if (level.equals(Level.TRACE))
         {
-            Log.wtf(msg.getNamespace(), log);
+            Log.wtf(tag, log);
         }
     }
 

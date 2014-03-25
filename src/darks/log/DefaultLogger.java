@@ -32,136 +32,177 @@ import darks.log.appender.Appender;
 public class DefaultLogger extends Logger
 {
 
-	private Category category;
+    private Category category;
 
-	private String tag;
+    private String tag;
 
-	/**
-	 * logger thread for async appender
-	 */
-	private static volatile LoggerThread thread = new LoggerThread();
+    /**
+     * logger thread for async appender
+     */
+    private static volatile LoggerThread thread = new LoggerThread();
 
-	private static Object mutex = new Object();
+    private static Object mutex = new Object();
 
-	public DefaultLogger(Category category, String tag)
-	{
-		this.category = category;
-		this.tag = tag;
-	}
+    public DefaultLogger(Category category, String tag)
+    {
+        this.category = category;
+        this.tag = tag;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void log(Level level, String msg, Throwable t)
-	{
-		if (category.getLevel().compare(level) > 0)
-		{
-			return;
-		}
-		StackTraceElement el = null;
-		if (t == null)
-		{
-			el = new Throwable().getStackTrace()[3];
-		}
-		else
-		{
-			el = t.getStackTrace()[1];
-		}
-		ThrowableInfo info = new ThrowableInfo(el, t);
-		LogMessage logMsg = buildMessage(level, msg, info);
-		doLogger(logMsg);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void log(Level level, Object msg, Throwable t)
+    {
+        if (category.getLevel().compare(level) > 0)
+        {
+            return;
+        }
+        StackTraceElement el = null;
+        if (t == null)
+        {
+            el = new Throwable().getStackTrace()[3];
+        }
+        else
+        {
+            el = t.getStackTrace()[1];
+        }
+        ThrowableInfo info = new ThrowableInfo(el, t);
+        LogMessage logMsg = buildMessage(level, msg.toString(), info);
+        doLogger(logMsg);
+    }
 
-	/**
-	 * Dispacher log message for doing appenders directly or keep with holder
-	 * for log thread
-	 * 
-	 * @param logMsg log message
-	 */
-	private void doLogger(LogMessage logMsg)
-	{
-		LoggerHolder holder = null;
-		Category cate = category;
-		while (cate != null)
-		{
-			for (Appender appender : cate.getAppenderList())
-			{
-				if (appender.isAsync())
-				{
-				    if (holder == null)
-				    {
-				        holder = new LoggerHolder(logMsg);
-				    }
-					holder.addAppender(appender);
-				}
-				else
-				{
-					appender.doAppend(logMsg);
-				}
-			}
-			if (cate.isInherit())
-			{
-	            cate = cate.getParent();
-			}
-			else
-			{
-			    break;
-			}
-		}
-		if (holder != null && !holder.isEmpty())
-		{
-			if (thread == null || !thread.isAlive())
-			{
-				synchronized (mutex)
-				{
-					if (thread == null || !thread.isAlive())
-					{
-						thread = new LoggerThread();
-						thread.start();
-					}
-				}
-			}
-			LoggerThread.getHolders().offer(holder);
-		}
-	}
+    /**
+     * Dispacher log message for doing appenders directly or keep with holder
+     * for log thread
+     * 
+     * @param logMsg log message
+     */
+    private void doLogger(LogMessage logMsg)
+    {
+        LoggerHolder holder = null;
+        Category cate = category;
+        while (cate != null)
+        {
+            for (Appender appender : cate.getAppenderList())
+            {
+                if (appender.isAsync())
+                {
+                    if (holder == null)
+                    {
+                        holder = new LoggerHolder(logMsg);
+                    }
+                    holder.addAppender(appender);
+                }
+                else
+                {
+                    appender.doAppend(logMsg);
+                }
+            }
+            if (cate.isInherit())
+            {
+                cate = cate.getParent();
+            }
+            else
+            {
+                break;
+            }
+        }
+        if (holder != null && !holder.isEmpty())
+        {
+            if (thread == null || !thread.isAlive())
+            {
+                synchronized (mutex)
+                {
+                    if (thread == null || !thread.isAlive())
+                    {
+                        thread = new LoggerThread();
+                        thread.start();
+                    }
+                }
+            }
+            LoggerThread.getHolders().offer(holder);
+        }
+    }
 
-	private LogMessage buildMessage(Level level, String msg, ThrowableInfo info)
-	{
-		LogMessage logMsg = new LogMessage();
-		logMsg.setCategory(category);
-		logMsg.setClassName(info.getCallerClass());
-		logMsg.setDate(new Date());
-		logMsg.setLevel(level);
-		logMsg.setMessage(msg);
-		logMsg.setNamespace(tag);
-		logMsg.setThreadName(Thread.currentThread().getName());
-		logMsg.setThrowableInfo(info);
-		logMsg.setTimeStamp(System.currentTimeMillis());
-		return logMsg;
-	}
+    private LogMessage buildMessage(Level level, String msg, ThrowableInfo info)
+    {
+        LogMessage logMsg = new LogMessage();
+        logMsg.setCategory(category);
+        logMsg.setClassName(info.getCallerClass());
+        logMsg.setDate(new Date());
+        logMsg.setLevel(level);
+        logMsg.setMessage(msg);
+        logMsg.setNamespace(tag);
+        logMsg.setThreadName(Thread.currentThread().getName());
+        logMsg.setThrowableInfo(info);
+        logMsg.setTimeStamp(System.currentTimeMillis());
+        return logMsg;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void addAppender(Appender appender, boolean rooted)
-	{
-		if (rooted)
-		{
-			Category cate = category;
-			while (cate.getParent() != null)
-			{
-				cate = cate.getParent();
-			}
-			synchronized (cate)
-			{
-				cate.getAppenderList().add(appender);
-			}
-		}
-		else
-		{
-			category.getAppenderList().add(appender);
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addAppender(Appender appender, boolean rooted)
+    {
+        if (rooted)
+        {
+            Category cate = category;
+            while (cate.getParent() != null)
+            {
+                cate = cate.getParent();
+            }
+            synchronized (cate)
+            {
+                cate.getAppenderList().add(appender);
+            }
+        }
+        else
+        {
+            category.getAppenderList().add(appender);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDebugEnabled()
+    {
+        return category != null && category.getLevel().equals(Level.DEBUG);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isInfoEnabled()
+    {
+        return category != null && category.getLevel().equals(Level.INFO);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isLevelEnabled(Level level)
+    {
+        return category != null && category.getLevel().equals(level);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setInherit(boolean inheritRoot)
+    {
+        if (category != null)
+        {
+            category.setInherit(inheritRoot);
+        }
+    }
+
+    
 }

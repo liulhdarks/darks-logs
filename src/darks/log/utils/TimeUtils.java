@@ -17,6 +17,7 @@
 
 package darks.log.utils;
 
+import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -24,45 +25,79 @@ import darks.log.utils.time.AndroidDateFormater;
 import darks.log.utils.time.DateFormater;
 import darks.log.utils.time.JavaDateFormater;
 
-
-
 /**
  * TimeUtils.java
+ * 
  * @version 1.0.0
  * @author Liu lihua
  */
 public class TimeUtils
 {
     private static volatile boolean androidFlag = false;
-    
+
     private static ConcurrentMap<String, DateFormater> formatter;
-    
+
     static
     {
-    	androidFlag = EnvUtils.isAndroidEnv();
+        androidFlag = EnvUtils.isAndroidEnv();
         formatter = new ConcurrentHashMap<String, DateFormater>();
     }
-    
+
+    /**
+     * Get date formatter to adapter Java and Android platform.
+     * 
+     * @param pattern Date pattern style
+     * @return DateFormater
+     */
     public static DateFormater getFormatter(String pattern)
     {
-    	DateFormater df = formatter.get(pattern);
-    	if (df != null)
-    	{
-    		return df;
-    	}
-    	synchronized (pattern)
-		{
+        DateFormater df = formatter.get(pattern);
+        if (df != null)
+        {
+            return df;
+        }
+        synchronized (pattern)
+        {
+            df = formatter.get(pattern);
+            if (df != null)
+            {
+                return df;
+            }
             if (androidFlag)
             {
-            	df = new AndroidDateFormater(pattern);
+                df = getAndroidDateFormater(pattern);
             }
             else
             {
-            	df = new JavaDateFormater(pattern);
+                df = new JavaDateFormater(pattern);
             }
             formatter.put(pattern, df);
-		}
+        }
         return df;
+    }
+
+    /**
+     * To solve the exception happened in some Android system when using
+     * java.text.SimpleDateFormat.
+     * 
+     * @param pattern Date pattern
+     * @return DateFormater
+     */
+    private static DateFormater getAndroidDateFormater(String pattern)
+    {
+        try
+        {
+            DateFormater df = new JavaDateFormater(pattern);
+            String date = df.format(new Date());
+            if (date != null)
+            {
+                return df;
+            }
+        }
+        catch (Exception e)
+        {
+        }
+        return new AndroidDateFormater(pattern);
     }
 
 }
