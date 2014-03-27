@@ -28,6 +28,39 @@ Example:<br/>
       }
   }
 </pre>
+If you want to catch android ANR crash logs automatically, you can register crash handler. 
+Parameter callback can be called after ANR happened.<br>
+Example:
+<pre>
+  Logger.Android.setApplication(this, true);
+</pre>
+  Or
+<pre>
+  Logger.Android.setApplication(this);
+  Logger.Android.registerCrashHandler();
+</pre>
+  Or
+<pre>
+  Logger.Android.setApplication(this);
+  Logger.Android.registerCrashHandler(new CallBack(){
+      @Override
+      public boolean handleMessage(Message msg)
+      {
+           new Thread()
+           {
+               public void run()
+               {
+                    Looper.prepare();
+                    Toast.makeText(CustomApplication.this, "The crash has happened.", Toast.LENGTH_LONG).show();
+                    Looper.loop();
+               }
+           }.start();
+           Thread.sleep(3000);
+           return true;
+      }
+  });
+</pre>
+
 After logd.properties created, we can configure it for logger.
 
 ### Customize Config Loader

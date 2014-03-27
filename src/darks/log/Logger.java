@@ -55,6 +55,28 @@ import darks.log.utils.EnvUtils;
  * 	Logger.Android.setApplication(...);
  * </pre>
  * 
+ * If you want to catch android crash log automatically, you can register crash
+ * handler. Parameter callback can be called after ANR happened.<br>
+ * Example:
+ * 
+ * <pre>
+ *  Logger.Android.setApplication(this, true);
+ * </pre>
+ * 
+ * Or
+ * 
+ * <pre>
+ *  Logger.Android.setApplication(this);
+ *  Logger.Android.registerCrashHandler();
+ * </pre>
+ * 
+ * Or
+ * 
+ * <pre>
+ *  Logger.Android.setApplication(this);
+ *  Logger.Android.registerCrashHandler(new CustomCrashCallBack());
+ * </pre>
+ * 
  * If you want to buffer, append or format log message, you can use
  * LoggerBuffer. Example:
  * 

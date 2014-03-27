@@ -23,6 +23,8 @@ import java.io.InputStream;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.os.Handler.Callback;
+import darks.log.externs.AndroidCrashHandler;
 import darks.log.kernel.Kernel;
 import darks.log.loader.ConfigLoader;
 import darks.log.loader.Loader;
@@ -32,33 +34,77 @@ import darks.log.loader.PropertiesLoader;
  * Configure android application required when logs find configuration file.
  * 
  * AndroidConfig.java
+ * 
  * @version 1.0.0
  * @author Liu lihua
  */
 public final class AndroidConfig
 {
 
-	private Application application;
-	
-	AndroidConfig()
-	{
-		
-	}
+    private Application application;
 
-	public Application getApplication()
-	{
-		return application;
-	}
+    AndroidConfig()
+    {
 
-	public void setApplication(Application application)
-	{
-		this.application = application;
-	}
+    }
 
-	/**
+    public Application getApplication()
+    {
+        return application;
+    }
+
+    public void setApplication(Application application)
+    {
+        this.application = application;
+    }
+
+    /**
+     * Set android application
+     * 
+     * @param application Android application
+     * @param regCrash If true, it will register crash logger's crash handler
+     */
+    public void setApplication(Application application, boolean regCrash)
+    {
+        this.application = application;
+        if (regCrash)
+        {
+            registerCrashHandler(null);
+        }
+    }
+
+    /**
+     * Register crash handler. It can catch ANR error automatically and use
+     * logger to output message. <br>
+     * You can use registerCrashHandler(Callback callback) to register the callback.
+     */
+    public void registerCrashHandler()
+    {
+        registerCrashHandler(null);
+    }
+
+    /**
+     * Register crash handler. It can catch ANR error automatically and use
+     * logger to output message.
+     * 
+     * @param callback Call back object.When ANR error happened, it will use
+     *            callback to notify developers. If it's null, it won't call
+     *            back.
+     */
+    public void registerCrashHandler(Callback callback)
+    {
+        if (application == null)
+        {
+            return;
+        }
+        AndroidCrashHandler.getInstance().setup(application, callback);
+    }
+
+    /**
      * Get loader or android environment
      * 
-     * @return If succeed to get loader, return loader object. Otherwise return null;.
+     * @return If succeed to get loader, return loader object. Otherwise return
+     *         null;.
      */
     public Loader getLoader()
     {
@@ -90,8 +136,7 @@ public final class AndroidConfig
         }
         catch (IOException e)
         {
-            Kernel.logError("Fail to get Asset config. Cause "
-                    + e.getMessage());
+            Kernel.logError("Fail to get Asset config. Cause " + e.getMessage());
         }
         return null;
     }
