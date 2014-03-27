@@ -61,6 +61,10 @@ public class LevelRangeFilter extends LoggerFilter
     @Override
     public int decide(LogMessage msg)
     {
+        if (levelMin == null || levelMax == null)
+        {
+            return LoggerFilter.ALLOW;
+        }
         Level lv = msg.getLevel();
         if (lv.compare(levelMin) >= 0 && lv.compare(levelMax) <= 0)
         {

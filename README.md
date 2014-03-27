@@ -44,7 +44,7 @@ Example:
   static Logger log = Logger.getLogger("darks.logs.test.TestLogger");
   static Logger log = Logger.getLogger("TestLogger");
 </pre>
-After define Logger variable, you can call info, debug, warn, error and so on to output message for specify level.
+After define Logger variable, you can call info, debug, warn, error and so on to output message for specify level.<br/>
 Example:
 <pre>
   log.debug("This is the darks logs hello world.");
@@ -76,7 +76,7 @@ Example:<br/>
 
 ### Config Appenders
 Darks logs has realized some frequently used appenders. Such as ConsoleAppender, AndroidAppender, FileAppender and so on. If you have configure multiple appenders, it will output log message to each appender when every message comes. All of appenders inherit from Appender<br/>
-If you need to configure class full name such as "darks.log.appender.impl.ConsoleAppender", you could just configure ConsoleAppender. If you configure class full name, it will load class directly. Or if you configure class simple name, it will find class in package darks.log.appender.impl, darks.log.filter, darks.log.layout, darks.log.pattern, darks.log.externs and so on.
+If you need to configure class full name such as "darks.log.appender.impl.ConsoleAppender", you could just configure ConsoleAppender. If you configure class full name, it will load class directly. Or if you configure class simple name, it will find class in package darks.log.appender.impl, darks.log.filter, darks.log.layout, darks.log.pattern, darks.log.externs and so on.<br/>
 Example:
 <pre>
   logd.root=info,console
@@ -134,6 +134,18 @@ Appender is the base class of all appenders. Appender can configure layout, filt
   logd.appender.console.filter.accept=true
 </pre>
 
+  LevelMatchFilter:Level match filter will output log which level has been contained by levels.<br/>
+  Example:
+<pre>
+  logd.appender.console=ConsoleAppender
+  logd.appender.console.layout=PatternLayout
+  logd.appender.console.layout.pattern=%d{yyyy-MM-dd HH:mm:ss} %c{1} - %m%n
+  logd.appender.console.filter=LevelMatchFilter
+  #It will only output the message which level is debug or info.
+  logd.appender.console.filter.levels=debug,info
+  logd.appender.console.filter.accept=true
+</pre>
+ 
   Custom filter:
 <pre>
   public class CustomFilter extends LoggerFilter

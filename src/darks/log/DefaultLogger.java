@@ -145,24 +145,9 @@ public class DefaultLogger extends Logger
      * {@inheritDoc}
      */
     @Override
-    public void addAppender(Appender appender, boolean rooted)
+    public void addAppender(Appender appender)
     {
-        if (rooted)
-        {
-            Category cate = category;
-            while (cate.getParent() != null)
-            {
-                cate = cate.getParent();
-            }
-            synchronized (cate)
-            {
-                cate.getAppenderList().add(appender);
-            }
-        }
-        else
-        {
-            category.getAppenderList().add(appender);
-        }
+        category.getAppenderList().add(appender);
     }
 
     /**
@@ -204,5 +189,4 @@ public class DefaultLogger extends Logger
         }
     }
 
-    
 }

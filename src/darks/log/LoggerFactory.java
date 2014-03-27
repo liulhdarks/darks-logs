@@ -34,108 +34,118 @@ import darks.log.loader.ConfigLoader;
  * LoggerFactory.java
  * 
  * @see Logger
- * @version 1.0.0
- * @author Liu lihua 2014-3-21
+ * @version 1.0.1
+ * @author Liu lihua
  */
 public final class LoggerFactory
 {
 
-	static ConfigLoader loader;
+    static ConfigLoader loader;
 
-	static volatile boolean inited = false;
+    static volatile boolean inited = false;
 
-	static Logger rootLogger;
+    static Logger rootLogger;
 
-	static
-	{
-		loader = new ConfigLoader();
-		try
-		{
-			inited = loader.initConfig();
-		}
-		catch (Exception e)
-		{
-			Kernel.logWarn(e.getMessage());
-			inited = false;
-		}
-		rootLogger = getRootLogger();
-	}
+    static
+    {
+        loader = new ConfigLoader();
+        try
+        {
+            inited = loader.initConfig();
+        }
+        catch (Exception e)
+        {
+            Kernel.logWarn(e.getMessage());
+            inited = false;
+        }
+        rootLogger = createRootLogger();
+    }
 
-	private LoggerFactory()
-	{
-	}
+    private LoggerFactory()
+    {
+    }
 
-	/**
-	 * Create logger object. You can use {@linkplain darks.log.Logger Logger}
-	 * instead of it.
-	 * 
-	 * @param tag Tag string
-	 * @return If succeed to be initialized, return
-	 *         {@linkplain darks.log.DefaultLogger DefaultLogger}. Otherwise
-	 *         return {@linkplain darks.log.InvalidLogger InvalidLogger}.
-	 */
-	public static synchronized Logger getLogger(String tag)
-	{
-		if (!inited)
-		{
-			return new InvalidLogger();
-		}
-		LoggerConfig cfg = Logger.Config;
-		Category category = getCategory(cfg, tag);
-		category.setInherit(cfg.getInherit(category.getName()));
-		category.buildAppenderArray();
-		return new DefaultLogger(category, tag);
-	}
+    /**
+     * Create logger object. You can use {@linkplain darks.log.Logger Logger}
+     * instead of it.
+     * 
+     * @param tag Tag string
+     * @return If succeed to be initialized, return
+     *         {@linkplain darks.log.DefaultLogger DefaultLogger}. Otherwise
+     *         return {@linkplain darks.log.InvalidLogger InvalidLogger}.
+     */
+    public static synchronized Logger getLogger(String tag)
+    {
+        if (!inited)
+        {
+            return new InvalidLogger();
+        }
+        LoggerConfig cfg = Logger.Config;
+        Category category = getCategory(cfg, tag);
+        category.setInherit(cfg.getInherit(category.getName()));
+        category.buildAppenderArray();
+        return new DefaultLogger(category, tag);
+    }
 
-	private static Logger getRootLogger()
-	{
-		return new DefaultLogger(Logger.Config.getRoot(), "");
-	}
+    /**
+     * Get root logger
+     * 
+     * @return Logger object
+     */
+    public static Logger getRootLogger()
+    {
+        return rootLogger;
+    }
 
-	/**
-	 * Find category object from config object by tag string.
-	 * 
-	 * @param cfg Configuration object
-	 * @param tag Tag string
-	 * @return Category object
-	 */
-	private static Category getCategory(LoggerConfig cfg, String tag)
-	{
-		Category category = cfg.getCategory(tag);
-		if (category == null)
-		{
-			category = deepFindCategory(cfg, tag);
-		}
-		if (category == null)
-		{
-			return cfg.getRoot();
-		}
-		return category;
-	}
+    private static Logger createRootLogger()
+    {
+        return new DefaultLogger(Logger.Config.getRoot(), "");
+    }
 
-	/**
-	 * The depth of search category by tag string
-	 * 
-	 * @param cfg Configuration object
-	 * @param tag Tag string
-	 * @return Category object
-	 */
-	private static Category deepFindCategory(LoggerConfig cfg, String tag)
-	{
-		Category match = null;
-		String maxKey = null;
-		for (Entry<String, Category> entry : cfg.getCategories().entrySet())
-		{
-			String key = entry.getKey();
-			if (tag.startsWith(key))
-			{
-				if (maxKey == null || maxKey.length() < key.length())
-				{
-					maxKey = key;
-					match = entry.getValue();
-				}
-			}
-		}
-		return match;
-	}
+    /**
+     * Find category object from config object by tag string.
+     * 
+     * @param cfg Configuration object
+     * @param tag Tag string
+     * @return Category object
+     */
+    private static Category getCategory(LoggerConfig cfg, String tag)
+    {
+        Category category = cfg.getCategory(tag);
+        if (category == null)
+        {
+            category = deepFindCategory(cfg, tag);
+        }
+        if (category == null)
+        {
+            return cfg.getRoot();
+        }
+        return category;
+    }
+
+    /**
+     * The depth of search category by tag string
+     * 
+     * @param cfg Configuration object
+     * @param tag Tag string
+     * @return Category object
+     */
+    private static Category deepFindCategory(LoggerConfig cfg, String tag)
+    {
+        Category match = null;
+        String maxKey = null;
+        for (Entry<String, Category> entry : cfg.getCategories().entrySet())
+        {
+            String key = entry.getKey();
+            if (tag.startsWith(key))
+            {
+                if (maxKey == null || maxKey.length() < key.length())
+                {
+                    maxKey = key;
+                    match = entry.getValue();
+                }
+            }
+        }
+        return match;
+    }
 }

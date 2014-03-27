@@ -68,8 +68,8 @@ import darks.log.utils.EnvUtils;
  * 
  * Logger.java
  * 
- * @version 1.0.1
- * @author Liu lihua 2014-3-21
+ * @version 1.0.2
+ * @author Liu lihua
  */
 public abstract class Logger
 {
@@ -323,10 +323,8 @@ public abstract class Logger
      * Add appender object
      * 
      * @param appender Appender object
-     * @param rooted If true, appender will be added to root logger. otherwise
-     *            be added to current logger.
      */
-    public abstract void addAppender(Appender appender, boolean rooted);
+    public abstract void addAppender(Appender appender);
 
     /**
      * Check if debug mode enabled.
@@ -369,4 +367,13 @@ public abstract class Logger
     {
     }
 
+    /**
+     * Get root logger
+     * 
+     * @return Logger object
+     */
+    public static Logger getRootLogger()
+    {
+        return LoggerFactory.getRootLogger();
+    }
 }

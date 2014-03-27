@@ -60,6 +60,10 @@ public class RegexMatchFilter extends LoggerFilter
     @Override
     public int decide(LogMessage msg)
     {
+        if (regex == null)
+        {
+            return LoggerFilter.ALLOW;
+        }
         Matcher matcher = regex.matcher(msg.getMessage());
         if (matcher.find())
         {

@@ -36,7 +36,7 @@ public class LoggerThread extends Thread
 
 	private static Queue<LoggerHolder> holders = new ConcurrentLinkedQueue<LoggerHolder>();
 	
-	private static final int SLEEP_DELAY_COUNT = 256;
+	private static final int SLEEP_DELAY_COUNT = 1024;
 	
 	public LoggerThread()
 	{

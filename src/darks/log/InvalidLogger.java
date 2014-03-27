@@ -46,7 +46,7 @@ public class InvalidLogger extends Logger
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addAppender(Appender appender, boolean rooted)
+	public void addAppender(Appender appender)
 	{
 		
 	}
