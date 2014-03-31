@@ -76,7 +76,7 @@ public abstract class Appender
      */
     private boolean async = false;
 
-    private volatile boolean activated = false;
+    private boolean activated = false;
 
     public Appender()
     {

@@ -20,6 +20,7 @@ package darks.log;
 import java.util.Date;
 
 import darks.log.appender.Appender;
+import darks.log.appender.AppenderManager;
 
 /**
  * Default logger object used to log message and do appenders by default
@@ -69,7 +70,8 @@ public class DefaultLogger extends Logger
             el = t.getStackTrace()[1];
         }
         ThrowableInfo info = new ThrowableInfo(el, t);
-        LogMessage logMsg = buildMessage(level, msg.toString(), info);
+        String message = msg == null ? "null" : msg.toString();
+        LogMessage logMsg = buildMessage(level, message, info);
         doLogger(logMsg);
     }
 
@@ -85,7 +87,7 @@ public class DefaultLogger extends Logger
         Category cate = category;
         while (cate != null)
         {
-            for (Appender appender : cate.getAppenderList())
+            for (Appender appender : cate.getAppenderMap().values())
             {
                 if (appender.isAsync())
                 {
@@ -147,7 +149,19 @@ public class DefaultLogger extends Logger
     @Override
     public void addAppender(Appender appender)
     {
-        category.getAppenderList().add(appender);
+        if (AppenderManager.registerAppender(appender))
+        {
+            category.getAppenderMap().put(appender.getName(), appender);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Appender removeAppender(String name)
+    {
+        return category.getAppenderMap().remove(name);
     }
 
     /**

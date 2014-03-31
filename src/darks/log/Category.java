@@ -18,43 +18,43 @@
 package darks.log;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import darks.log.appender.Appender;
 import darks.log.appender.AppenderManager;
 import darks.log.kernel.Kernel;
 
 /**
- * Record logger's category information.Include appenders, level, name and so on.
- * Category object will inherit root category attributes.
+ * Record logger's category information.Include appenders, level, name and so
+ * on. Category object will inherit root category attributes.
  * 
  * Category.java
+ * 
  * @version 1.0.0
- * @author Liu lihua
- * 2014-3-21
+ * @author Liu lihua 2014-3-21
  */
 public class Category
 {
-	/**
-	 * Category name
-	 */
+    /**
+     * Category name
+     */
     private String name;
-    
+
     /**
      * Parent category
      */
     private Category parent;
-    
+
     private Level level = Level.VERBOSE;
-    
+
     /**
      * Appenders tags
      */
     private String[] appenders;
-    
-    private List<Appender> appenderList = new LinkedList<Appender>();
-    
+
+    private Map<String, Appender> appenderMap = new ConcurrentHashMap<String, Appender>();
+
     private boolean inherit = true;
 
     public Category()
@@ -63,36 +63,37 @@ public class Category
 
     public Category(Category parent)
     {
-    	this.parent = parent;
+        this.parent = parent;
     }
-    
+
     /**
      * Build appenders list from appender tags array
+     * 
      * @return appenders list
      */
-    public synchronized List<Appender> buildAppenderArray()
+    public synchronized Map<String, Appender> buildAppenderMap()
     {
-    	if (appenderList != null && !appenderList.isEmpty())
-    	{
-    		return appenderList;
-    	}
-    	appenderList.clear();
-    	if (appenders != null)
-    	{
-        	for (String app : appenders)
-        	{
-        		Appender appender = AppenderManager.getAppender(app);
-        		if (appender == null)
-        		{
-        			Kernel.logWarn("Cannot find appender " + app);
-        		}
-        		else
-        		{
-        			appenderList.add(appender);
-        		}
-        	}
-    	}
-		return appenderList;
+        if (!appenderMap.isEmpty())
+        {
+            return appenderMap;
+        }
+        appenderMap.clear();
+        if (appenders != null)
+        {
+            for (String app : appenders)
+            {
+                Appender appender = AppenderManager.getAppender(app);
+                if (appender == null)
+                {
+                    Kernel.logWarn("Cannot find appender " + app);
+                }
+                else
+                {
+                    appenderMap.put(appender.getName(), appender);
+                }
+            }
+        }
+        return appenderMap;
     }
 
     public String getName()
@@ -135,32 +136,30 @@ public class Category
         this.appenders = appenders;
     }
 
-	public boolean isInherit()
-	{
-		return inherit;
-	}
+    public boolean isInherit()
+    {
+        return inherit;
+    }
 
-	public void setInherit(boolean inherit)
-	{
-		this.inherit = inherit;
-	}
+    public void setInherit(boolean inherit)
+    {
+        this.inherit = inherit;
+    }
 
-	
-	public List<Appender> getAppenderList()
-	{
-		return appenderList;
-	}
+    public Map<String, Appender> getAppenderMap()
+    {
+        return appenderMap;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString()
-	{
-		return "Category [name=" + name + ", parent=" + parent + ", level="
-				+ level + ", appenders=" + Arrays.toString(appenders)
-				+ ", inherit=" + inherit + "]";
-	}
-    
-    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString()
+    {
+        return "Category [name=" + name + ", parent=" + parent + ", level="
+                + level + ", appenders=" + Arrays.toString(appenders)
+                + ", inherit=" + inherit + "]";
+    }
+
 }

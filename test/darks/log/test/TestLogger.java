@@ -18,6 +18,8 @@
 package darks.log.test;
 
 import darks.log.Logger;
+import darks.log.appender.impl.ConsoleAppender;
+import darks.log.layout.PatternLayout;
 
 /**
  * 
@@ -54,6 +56,12 @@ public class TestLogger
                 log.error("darks logs test error " + i);
                 log.info("darks" + i);
             }
+            ConsoleAppender console = new ConsoleAppender();
+            console.setName("TEST");
+            console.setLayout(new PatternLayout());
+            console.getLayout().setPattern("[%p] %m%n");
+            log.addAppender(console);
+            log.info("darks logs test info");
             testException();
         }
         catch (Exception e)

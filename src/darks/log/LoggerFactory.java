@@ -83,7 +83,7 @@ public final class LoggerFactory
         LoggerConfig cfg = Logger.Config;
         Category category = getCategory(cfg, tag);
         category.setInherit(cfg.getInherit(category.getName()));
-        category.buildAppenderArray();
+        category.buildAppenderMap();
         return new DefaultLogger(category, tag);
     }
 

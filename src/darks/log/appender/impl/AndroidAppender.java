@@ -29,10 +29,10 @@ import darks.log.utils.StringUtils;
  * Example:
  * 
  * <pre>
- *  logd.appender.console=AndroidAppender
- *  logd.appender.console.layout=PatternLayout
- *  logd.appender.console.layout.convertor=DefaultPattern
- *  logd.appender.console.layout.pattern=%d{yyyy-MM-dd HH:mm:ss} [%f][%p] - %m%n
+ *  logd.appender.LOGCAT=AndroidAppender
+ *  logd.appender.LOGCAT.layout=PatternLayout
+ *  logd.appender.LOGCAT.layout.pattern=%m
+ *  logd.appender.LOGCAT.layer=1
  * </pre>
  * 
  * AndroidAppender.java
@@ -100,4 +100,10 @@ public class AndroidAppender extends Appender
         return true;
     }
 
+    public void setLayer(int layer)
+    {
+        this.layer = layer;
+    }
+
+    
 }

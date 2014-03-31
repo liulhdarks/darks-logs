@@ -44,15 +44,16 @@ public final class AppenderManager
      * 
      * @param appender Appender object
      */
-    public static void registerAppender(Appender appender)
+    public static boolean registerAppender(Appender appender)
     {
         if (appender == null || appender.getName() == null
                 || "".equals(appender.getName()))
         {
             Kernel.logError("Fail to register appender which is null.");
-            return;
+            return false;
         }
         appenders.put(appender.getName(), appender);
+        return true;
     }
 
     /**

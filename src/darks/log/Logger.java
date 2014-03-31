@@ -18,6 +18,7 @@
 package darks.log;
 
 import darks.log.appender.Appender;
+import darks.log.appender.AppenderManager;
 import darks.log.utils.EnvUtils;
 
 /**
@@ -60,21 +61,21 @@ import darks.log.utils.EnvUtils;
  * Example:
  * 
  * <pre>
- *  Logger.Android.setApplication(this, true);
+ * Logger.Android.setApplication(this, true);
  * </pre>
  * 
  * Or
  * 
  * <pre>
- *  Logger.Android.setApplication(this);
- *  Logger.Android.registerCrashHandler();
+ * Logger.Android.setApplication(this);
+ * Logger.Android.registerCrashHandler();
  * </pre>
  * 
  * Or
  * 
  * <pre>
- *  Logger.Android.setApplication(this);
- *  Logger.Android.registerCrashHandler(new CustomCrashCallBack());
+ * Logger.Android.setApplication(this);
+ * Logger.Android.registerCrashHandler(new CustomCrashCallBack());
  * </pre>
  * 
  * If you want to buffer, append or format log message, you can use
@@ -347,6 +348,25 @@ public abstract class Logger
      * @param appender Appender object
      */
     public abstract void addAppender(Appender appender);
+
+    /**
+     * Remove appender from current logger.
+     * 
+     * @param name Appender name
+     * @return Appender object
+     */
+    public abstract Appender removeAppender(String name);
+
+    /**
+     * Get appender from appenders manager.
+     * 
+     * @param name Appender name
+     * @return Appender object
+     */
+    public Appender getAppender(String name)
+    {
+        return AppenderManager.getAppender(name);
+    }
 
     /**
      * Check if debug mode enabled.

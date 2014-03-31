@@ -51,4 +51,14 @@ public class InvalidLogger extends Logger
 		
 	}
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Appender removeAppender(String name)
+    {
+        return null;
+    }
+
+	
 }

@@ -104,10 +104,10 @@ public class ConfigLoader
     private synchronized void initCategories()
     {
         Category rootCate = Logger.Config.getRoot();
-        rootCate.buildAppenderArray();
+        rootCate.buildAppenderMap();
         for (Category cate : Logger.Config.getCategories().values())
         {
-            cate.buildAppenderArray();
+            cate.buildAppenderMap();
         }
     }
 }
