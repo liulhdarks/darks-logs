@@ -48,20 +48,21 @@ public class TestLogger
     {
         try
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 2; i++)
             {
                 log.info("darks logs test info " + i);
                 log.debug("darks logs test debug " + i);
                 log.warn("darks logs test warn " + i);
                 log.error("darks logs test error " + i);
-                log.info("darks" + i);
             }
+            
             ConsoleAppender console = new ConsoleAppender();
             console.setName("TEST");
             console.setLayout(new PatternLayout());
             console.getLayout().setPattern("[%p] %m%n");
             log.addAppender(console);
             log.info("darks logs test info");
+            
             testException();
         }
         catch (Exception e)

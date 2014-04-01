@@ -170,7 +170,7 @@ public class DefaultLogger extends Logger
     @Override
     public boolean isDebugEnabled()
     {
-        return category != null && category.getLevel().equals(Level.DEBUG);
+        return category != null && (category.getLevel().getLevel() <= Level.DEBUG.getLevel());
     }
 
     /**
@@ -179,7 +179,7 @@ public class DefaultLogger extends Logger
     @Override
     public boolean isInfoEnabled()
     {
-        return category != null && category.getLevel().equals(Level.INFO);
+        return category != null && (category.getLevel().getLevel() <= Level.INFO.getLevel());
     }
 
     /**
@@ -188,7 +188,7 @@ public class DefaultLogger extends Logger
     @Override
     public boolean isLevelEnabled(Level level)
     {
-        return category != null && category.getLevel().equals(level);
+        return category != null && (category.getLevel().getLevel() <= level.getLevel());
     }
 
     /**

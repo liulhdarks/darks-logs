@@ -17,8 +17,8 @@
 
 package darks.log.appender;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import darks.log.kernel.Kernel;
 
@@ -27,7 +27,7 @@ import darks.log.kernel.Kernel;
  * 
  * Manager.java
  * 
- * @version 1.0.0
+ * @version 1.0.1
  * @author Liu lihua
  */
 public final class AppenderManager
@@ -36,7 +36,7 @@ public final class AppenderManager
 
     static
     {
-        appenders = new HashMap<String, Appender>();
+        appenders = new ConcurrentHashMap<String, Appender>();
     }
 
     /**

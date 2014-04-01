@@ -125,10 +125,33 @@ public class PropertiesLoader extends Loader
             readLine(line);
         }
     }
+    
+    private String[] readKeyValue(String line)
+    {
+        int splitIndex = -1;
+        if ((splitIndex = line.indexOf('=')) < 0)
+        {
+            splitIndex = line.indexOf(':');
+        }
+        if (splitIndex < 0)
+        {
+            throw new ConfigException("logger config has the invalid separate char in line:"
+                    + line);
+        }
+        if (splitIndex >= line.length() - 1)
+        {
+            throw new ConfigException("logger config has the invalid value in line:"
+                    + line);
+        }
+        String[] keyval = new String[2];
+        keyval[0] = line.substring(0, splitIndex);
+        keyval[1] = line.substring(splitIndex + 1);
+        return keyval;
+    }
 
     private void readLine(String line)
     {
-        String[] keyval = line.split("=");
+        String[] keyval = readKeyValue(line);
         if (keyval.length != 2)
         {
             throw new ConfigException("logger config has a invalid line:"
