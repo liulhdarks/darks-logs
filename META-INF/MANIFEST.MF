@@ -4,7 +4,7 @@ Built-By: Windows 7
 Build-Jdk: 1.6.0
 
 Name: darks.log
-Implementation-Title: logd
+Implementation-Title: darks-logs
 Implementation-Vendor: "Darks Logs Project"
-Implementation-Version: 1.0.6
+Implementation-Version: 1.0.7
 
