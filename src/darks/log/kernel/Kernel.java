@@ -17,9 +17,7 @@
 
 package darks.log.kernel;
 
-import java.lang.reflect.Constructor;
-
-import darks.log.utils.ReflectUtils;
+import darks.log.utils.EnvUtils;
 
 /**
  * 
@@ -34,7 +32,11 @@ public final class Kernel
     
     static
     {
-        if (!checkLogger("android.util.Log"))
+        if (EnvUtils.isAndroidEnv())
+        {
+            logger = new AndroidKernelLogger();
+        }
+        else
         {
             logger = new ConsoleKernelLogger();
         }
@@ -83,25 +85,5 @@ public final class Kernel
     public static void logError(String msg, Throwable e)
     {
         logger.error(msg, e);
-    }
-    
-    private static boolean checkLogger(String className)
-    {
-        try
-        {
-            Class<?> clazz = Class.forName(className);
-            Constructor<?> cst = ReflectUtils.getConstructor(clazz);
-            if (cst == null)
-            {
-                return false;
-            }
-            logger = (KernelLogger) cst.newInstance();
-            return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
-        
     }
 }
