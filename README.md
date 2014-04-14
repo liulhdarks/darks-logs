@@ -28,6 +28,17 @@ Example:<br/>
       }
   }
 </pre>
+If you want to load logd.properties from SDCARD, you can configure it in application:
+<pre>
+  Logger.Android.setApplication(this);
+  Logger.Android.setConfigPath("/mnt/sdcard/xxx/logd.properties");
+</pre>
+Or
+<pre>
+  Logger.Android.setApplication(this);
+  Logger.Android.setConfigPath("xxx/logd.properties");
+</pre>
+
 If you want to catch android ANR crash logs automatically, you can register crash handler. 
 Parameter callback can be called after ANR happened.<br>
 Example:

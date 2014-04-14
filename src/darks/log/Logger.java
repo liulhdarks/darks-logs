@@ -56,6 +56,18 @@ import darks.log.utils.EnvUtils;
  * 	Logger.Android.setApplication(...);
  * </pre>
  * 
+ * If you want to load logd.properties from SDCARD, you can do like this:
+ * 
+ * <pre>
+ * Logger.Android.setConfigPath(&quot;/mnt/sdcard/xxx/logd.properties&quot;);
+ * </pre>
+ * 
+ * Or
+ * 
+ * <pre>
+ * Logger.Android.setConfigPath(&quot;xxx/logd.properties&quot;);
+ * </pre>
+ * 
  * If you want to catch android crash log automatically, you can register crash
  * handler. Parameter callback can be called after ANR happened.<br>
  * Example:

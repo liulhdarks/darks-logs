@@ -17,6 +17,8 @@
 
 package darks.log;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -29,19 +31,22 @@ import darks.log.kernel.Kernel;
 import darks.log.loader.ConfigLoader;
 import darks.log.loader.Loader;
 import darks.log.loader.PropertiesLoader;
+import darks.log.utils.StorageUtils;
 
 /**
  * Configure android application required when logs find configuration file.
  * 
  * AndroidConfig.java
  * 
- * @version 1.0.0
+ * @version 1.0.1
  * @author Liu lihua
  */
 public final class AndroidConfig
 {
 
     private Application application;
+    
+    private String configPath;
 
     AndroidConfig()
     {
@@ -113,7 +118,16 @@ public final class AndroidConfig
         {
             return null;
         }
-        return getAssetConfig(ctx);
+        Loader loader = null;
+        if (configPath != null && !"".equals(configPath))
+        {
+            loader = getSdcardConfig(ctx);
+        }
+        if (loader == null)
+        {
+            loader = getAssetConfig(ctx);
+        }
+        return loader;
     }
 
     /**
@@ -140,4 +154,44 @@ public final class AndroidConfig
         }
         return null;
     }
+    
+    /**
+     * Get config from android sdcard or memory.
+     * 
+     * @param ctx Android context/application
+     * @return If succeed to get config, return Loader.
+     */
+    private Loader getSdcardConfig(Context ctx)
+    {
+        try
+        {
+            File file = new File(configPath);
+            if (!file.exists())
+            {
+                file = new File(StorageUtils.getAbsoluteSdcardPath(), configPath);
+                if (!file.exists())
+                {
+                    return null;
+                }
+            }
+            FileInputStream fis = new FileInputStream(file);
+            return new PropertiesLoader(fis);
+        }
+        catch (IOException e)
+        {
+            Kernel.logError("Fail to get sdcard config. Cause " + e.getMessage());
+        }
+        return null;
+    }
+
+    public String getConfigPath()
+    {
+        return configPath;
+    }
+
+    public void setConfigPath(String configPath)
+    {
+        this.configPath = configPath;
+    }
+
 }
