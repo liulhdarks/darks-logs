@@ -2,7 +2,16 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>darks.log</groupId>
   <artifactId>darks-logs</artifactId>
-  <version>1.0.7</version>
+  <version>1.0.7r</version>
+  
+  <distributionManagement>
+		<repository>
+			<id>nexus-osc-thirdparty</id>
+			<name>Nexus osc thirdparty</name>
+			<url>http://maven.oschina.net/content/repositories/thirdparty/</url>
+		</repository>
+	</distributionManagement>
+  
   <dependencies>
   	<dependency>
 	  <groupId>com.google.android</groupId>
