@@ -1,2 +1,9 @@
 /bin
-/logs
+bin
+/bin/
+
+*.class
+*.log
+*.txt
+*.exe
+/target/
